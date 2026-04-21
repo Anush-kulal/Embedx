@@ -1,19 +1,15 @@
 'use client';
 import { useRouter } from 'next/navigation';
+import { Anchor, Gamepad2, AlertTriangle, HeartPulse, Heart, Activity, Droplets, Sparkles, CheckCircle2, Home, User } from 'lucide-react';
 
 export default function PatientDashboard() {
   const router = useRouter();
 
   return (
     <div className="bg-[#f7f9fb] text-[#191c1e] min-h-screen font-public-sans pb-28">
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Public+Sans:wght@400;500;600&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL,GRAD,opsz@400,0..1,0,24&display=swap');
-
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
 
         .font-manrope { font-family: 'Manrope', sans-serif; }
         .font-public-sans { font-family: 'Public Sans', sans-serif; }
@@ -28,10 +24,10 @@ export default function PatientDashboard() {
       `}} />
 
       {/* TopAppBar */}
-      <header className="bg-white border-b border-slate-100 fixed top-0 w-full z-50 h-16 flex justify-between items-center px-5">
+      {/* <header className="bg-white border-b border-slate-100 fixed top-0 w-full z-50 h-16 flex justify-between items-center px-5">
         <div className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-[#003c90] pt-1">anchor</span>
-          <h1 className="text-[#003c90] font-extrabold text-xl tracking-tight font-manrope">HealthSync</h1>
+          <Anchor className="text-[#003c90] w-6 h-6" />
+          <h1 className="text-[#003c90] font-extrabold text-xl tracking-tight font-manrope">Nivero</h1>
         </div>
         <div className="flex items-center gap-4">
           <button 
@@ -40,36 +36,36 @@ export default function PatientDashboard() {
             SOS
           </button>
         </div>
-      </header>
+      </header> */}
 
       <main className="pt-24 px-5 max-w-screen-md mx-auto">
         {/* Quick Action Grid */}
         <div className="grid grid-cols-2 gap-[12px] mb-[24px]">
-          <button 
+          <button
             onClick={() => router.push('/patient-app/games')}
             className="flex flex-col items-center justify-center bg-white border border-[#d2e6ef] p-6 rounded-2xl hover:bg-slate-50 transition-colors active:scale-95 duration-150 text-[#003c90]">
-            <span className="material-symbols-outlined text-4xl mb-2">sports_esports</span>
+            <Gamepad2 className="w-8 h-8 mb-2" />
             <span className="text-[14px] leading-[20px] tracking-[0.02em] font-semibold">Game</span>
           </button>
-          
-          <button 
+
+          <button
             onClick={() => router.push('/patient-app/sos')}
             className="flex flex-col items-center justify-center bg-[#ffdad6] border border-[#ba1a1a]/10 p-6 rounded-2xl hover:bg-[#ffdad6]/80 transition-colors active:scale-95 duration-150 relative overflow-hidden text-[#ba1a1a]">
-            <span className="material-symbols-outlined text-4xl mb-2 relative z-10" style={{ fontVariationSettings: "'FILL' 1" }}>emergency_home</span>
+            <AlertTriangle fill="currentColor" strokeWidth={0} className="w-8 h-8 mb-2 relative z-10 text-[#ba1a1a]" />
             <span className="text-[14px] leading-[20px] tracking-[0.02em] font-semibold relative z-10">SOS</span>
           </button>
-          
-          <button 
+
+          <button
             onClick={() => router.push('/patient-app/heart-rate')}
             className="flex flex-col items-center justify-center bg-white border border-[#d2e6ef] p-6 rounded-2xl hover:bg-slate-50 transition-colors active:scale-95 duration-150 text-[#003c90]">
-            <span className="material-symbols-outlined text-4xl mb-2">monitor_heart</span>
+            <HeartPulse className="w-8 h-8 mb-2" />
             <span className="text-[14px] leading-[20px] tracking-[0.02em] font-semibold text-center">Heart Rate Checker</span>
           </button>
-          
-          <button className="flex flex-col items-center justify-center bg-white border border-[#d2e6ef] p-6 rounded-2xl hover:bg-slate-50 transition-colors active:scale-95 duration-150 text-[#003c90]">
+
+          {/* <button className="flex flex-col items-center justify-center bg-white border border-[#d2e6ef] p-6 rounded-2xl hover:bg-slate-50 transition-colors active:scale-95 duration-150 text-[#003c90]">
             <span className="material-symbols-outlined text-4xl mb-2">anchor</span>
             <span className="text-[14px] leading-[20px] tracking-[0.02em] font-semibold">Anchor</span>
-          </button>
+          </button> */}
         </div>
 
         {/* Current Vitals Summary */}
@@ -79,7 +75,7 @@ export default function PatientDashboard() {
             <div className="col-span-2 row-span-2 bg-white border border-[#d2e6ef] rounded-2xl p-[16px] flex flex-col justify-between shadow-sm">
               <div>
                 <div className="flex items-center gap-2 text-[#003c90] mb-1">
-                  <span className="material-symbols-outlined">favorite</span>
+                  <Heart className="w-5 h-5" />
                   <span className="text-[12px] leading-[16px] tracking-[0.04em] font-semibold">Heart Rate</span>
                 </div>
                 <p className="text-[30px] leading-[38px] tracking-[-0.02em] font-bold font-manrope text-[#191c1e]">
@@ -88,30 +84,30 @@ export default function PatientDashboard() {
               </div>
               <div className="h-16 w-full bg-[#d9e2ff] rounded-lg overflow-hidden relative">
                 <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#003c90] to-transparent"></div>
-                <img className="w-full h-full object-cover mix-blend-multiply" alt="EKG line graph" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQgoTYP3osi-u2yVAblSXRFm1YAiCUH4gJCSx8Lxy95j_sUWkh3m_VPkJZ4MRO-8Q1cxpZ7AJiqeBoBtAkbqvhK88-_ug5genmVTqu9qcRfHA9RD3CQ5P4pLh5Yi8bugWf0_fuJOvTNlw8xdWurQdary3py18DhE_widyFnR1hXyhc-MS2lOv0-ANsoDv3uaHTTAFsMCIX8qSnfLI9yCj22NVmHXGrxVD3s62w-8Go5-YaToAw7gHeivP-btmmnR5l9NrBBkitJsWS"/>
+                <img className="w-full h-full object-cover mix-blend-multiply" alt="EKG line graph" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQgoTYP3osi-u2yVAblSXRFm1YAiCUH4gJCSx8Lxy95j_sUWkh3m_VPkJZ4MRO-8Q1cxpZ7AJiqeBoBtAkbqvhK88-_ug5genmVTqu9qcRfHA9RD3CQ5P4pLh5Yi8bugWf0_fuJOvTNlw8xdWurQdary3py18DhE_widyFnR1hXyhc-MS2lOv0-ANsoDv3uaHTTAFsMCIX8qSnfLI9yCj22NVmHXGrxVD3s62w-8Go5-YaToAw7gHeivP-btmmnR5l9NrBBkitJsWS" />
               </div>
             </div>
 
             <div className="col-span-2 bg-white border border-[#d2e6ef] rounded-2xl p-[16px] flex items-center justify-between shadow-sm">
               <div>
                 <div className="flex items-center gap-2 text-[#003c90] mb-1">
-                  <span className="material-symbols-outlined">compress</span>
+                  <Activity className="w-5 h-5" />
                   <span className="text-[12px] leading-[16px] tracking-[0.04em] font-semibold">Pressure</span>
                 </div>
                 <p className="text-[20px] leading-[28px] font-semibold font-manrope text-[#191c1e]">120/80</p>
               </div>
-              <span className="material-symbols-outlined text-green-500 text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+              <CheckCircle2 fill="currentColor" strokeWidth={0} className="text-green-500 w-8 h-8" />
             </div>
 
             <div className="col-span-2 bg-white border border-[#d2e6ef] rounded-2xl p-[16px] flex items-center justify-between shadow-sm">
               <div>
                 <div className="flex items-center gap-2 text-[#003c90] mb-1">
-                  <span className="material-symbols-outlined">water_drop</span>
+                  <Droplets className="w-5 h-5" />
                   <span className="text-[12px] leading-[16px] tracking-[0.04em] font-semibold">Oxygen</span>
                 </div>
                 <p className="text-[20px] leading-[28px] font-semibold font-manrope text-[#191c1e]">98%</p>
               </div>
-              <span className="material-symbols-outlined text-green-500 text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+              <CheckCircle2 fill="currentColor" strokeWidth={0} className="text-green-500 w-8 h-8" />
             </div>
           </div>
         </section>
@@ -122,7 +118,7 @@ export default function PatientDashboard() {
           <div className="bg-[#0f52ba] text-[#bcceff] p-6 rounded-2xl relative overflow-hidden shadow-xl shadow-[#0f52ba]/10">
             <div className="relative z-10">
               <div className="flex items-center gap-2 mb-2 text-white">
-                <span className="material-symbols-outlined">auto_awesome</span>
+                <Sparkles className="w-5 h-5" />
                 <span className="text-[14px] leading-[20px] tracking-[0.02em] font-semibold">Daily Summary</span>
               </div>
               <h3 className="text-[24px] leading-[32px] tracking-[-0.01em] font-semibold font-manrope text-white mb-2">Your recovery is excellent today</h3>
@@ -138,31 +134,31 @@ export default function PatientDashboard() {
             <h2 className="text-[20px] leading-[28px] font-semibold font-manrope text-[#191c1e]">Wellness Tips</h2>
             <button className="text-[#003c90] text-[14px] leading-[20px] tracking-[0.02em] font-semibold">View All</button>
           </div>
-          
+
           <div className="flex gap-[12px] overflow-x-auto pb-4 -mx-5 px-5 no-scrollbar flex-nowrap items-stretch">
             <div className="flex-none w-64 bg-white border border-[#d2e6ef] rounded-2xl overflow-hidden shadow-sm flex flex-col">
               <div className="h-32 bg-slate-100 flex-shrink-0">
-                <img className="w-full h-full object-cover" alt="peaceful woman meditating" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9eIXOxymOVZqxs3ZKuCl9crTE-0wWo7AFCRBFL3fzJLLQOyToKiGVPHuw2zcDOn9L3qQj6y0I5UW_XM5nHK06C5tACDUmVFjOfqjjlzQP0sCmWNQ884wXVIcmO3up0nKZyyYB6iEii0mUjBO47W_VvBbJeTdC5fexBEGl634sg87cuJZwxsg9OdIyMU6H2Dd0_miK0woWfhP8vRibj2AeQyZUEFCST148uGJyU8QeurVA7E3dM9C7IjIUx4FHN5jMWtReflaiXlHs"/>
+                <img className="w-full h-full object-cover" alt="peaceful woman meditating" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9eIXOxymOVZqxs3ZKuCl9crTE-0wWo7AFCRBFL3fzJLLQOyToKiGVPHuw2zcDOn9L3qQj6y0I5UW_XM5nHK06C5tACDUmVFjOfqjjlzQP0sCmWNQ884wXVIcmO3up0nKZyyYB6iEii0mUjBO47W_VvBbJeTdC5fexBEGl634sg87cuJZwxsg9OdIyMU6H2Dd0_miK0woWfhP8vRibj2AeQyZUEFCST148uGJyU8QeurVA7E3dM9C7IjIUx4FHN5jMWtReflaiXlHs" />
               </div>
               <div className="p-[16px] flex flex-col justify-center flex-grow">
                 <span className="text-[12px] leading-[16px] tracking-[0.04em] font-semibold text-[#003c90] mb-1 block">MINDFULNESS</span>
                 <p className="text-[16px] leading-[24px] font-semibold text-[#191c1e] line-clamp-1">5-Minute Stress Reliever</p>
               </div>
             </div>
-            
+
             <div className="flex-none w-64 bg-white border border-[#d2e6ef] rounded-2xl overflow-hidden shadow-sm flex flex-col">
               <div className="h-32 bg-slate-100 flex-shrink-0">
-                <img className="w-full h-full object-cover" alt="healthy meal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWlzEQzKFUXQyOGpky4SgXpvZrkAUrOUHS3xAm3uy911MJ9nwT7Wdr-a7UbNxlbNymiHVEpPde6vRPwcYKf-JybDxgUXDRGpVeltBOydqqqmkY1zbLpL0RNjBfXRHANx5NLMFIJlLGZpn7EJecUUw8-9P1wXG14j0t29RBzvSlQWFgsMxfDcLB1sqanU6JPtDU9xP098MYPlBMo2KwvzUQs0qaxWSEKoKRv0wGypEm-wmqYUb3AOgU5F5ROHsagCvv5vsqCfzNSWrE"/>
+                <img className="w-full h-full object-cover" alt="healthy meal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWlzEQzKFUXQyOGpky4SgXpvZrkAUrOUHS3xAm3uy911MJ9nwT7Wdr-a7UbNxlbNymiHVEpPde6vRPwcYKf-JybDxgUXDRGpVeltBOydqqqmkY1zbLpL0RNjBfXRHANx5NLMFIJlLGZpn7EJecUUw8-9P1wXG14j0t29RBzvSlQWFgsMxfDcLB1sqanU6JPtDU9xP098MYPlBMo2KwvzUQs0qaxWSEKoKRv0wGypEm-wmqYUb3AOgU5F5ROHsagCvv5vsqCfzNSWrE" />
               </div>
               <div className="p-[16px] flex flex-col justify-center flex-grow">
                 <span className="text-[12px] leading-[16px] tracking-[0.04em] font-semibold text-[#003c90] mb-1 block">NUTRITION</span>
                 <p className="text-[16px] leading-[24px] font-semibold text-[#191c1e] line-clamp-1">Best Foods for Focus</p>
               </div>
             </div>
-            
+
             <div className="flex-none w-64 bg-white border border-[#d2e6ef] rounded-2xl overflow-hidden shadow-sm flex flex-col">
               <div className="h-32 bg-slate-100 flex-shrink-0">
-                <img className="w-full h-full object-cover" alt="modern bedroom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlNHQBxcmqvjELiDjQkRIslwGEOtmcxaWXeslJ8A7C2iUtlLUMDg4XVy_Svaqs5AuFgVRfKRUXpAQe3krYKr0u0hP4Yogs4DZVrLDzcqb57b1yXPgJalXq25hz3xA6KhzE1Y-W0EiDJpV2pg1OltXcrec_qEQ691V9Z8Vn12tFrfI4nOFlLdl0U9AI2JJoziMrRdpBrJw9Moc8FY5uOv5mHJNqHNORIG4_HefDF7cE57phQbXQvOU1eB42eJk4Y29rIKvMH7DN32kc"/>
+                <img className="w-full h-full object-cover" alt="modern bedroom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlNHQBxcmqvjELiDjQkRIslwGEOtmcxaWXeslJ8A7C2iUtlLUMDg4XVy_Svaqs5AuFgVRfKRUXpAQe3krYKr0u0hP4Yogs4DZVrLDzcqb57b1yXPgJalXq25hz3xA6KhzE1Y-W0EiDJpV2pg1OltXcrec_qEQ691V9Z8Vn12tFrfI4nOFlLdl0U9AI2JJoziMrRdpBrJw9Moc8FY5uOv5mHJNqHNORIG4_HefDF7cE57phQbXQvOU1eB42eJk4Y29rIKvMH7DN32kc" />
               </div>
               <div className="p-[16px] flex flex-col justify-center flex-grow">
                 <span className="text-[12px] leading-[16px] tracking-[0.04em] font-semibold text-[#003c90] mb-1 block">SLEEP</span>
@@ -176,21 +172,27 @@ export default function PatientDashboard() {
       {/* BottomNavBar */}
       <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 px-4 pb-safe bg-white border-t border-slate-100 shadow-[0_-4px_12px_rgba(15,82,186,0.05)] rounded-t-2xl text-[#191c1e]">
         <button className="flex flex-col items-center justify-center text-[#003c90] bg-[#e1f5fe]/80 rounded-xl px-4 py-1 active:scale-90 transition-transform">
-          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>home</span>
+          <Home fill="currentColor" strokeWidth={0} className="w-6 h-6" />
           <span className="font-manrope text-[11px] font-medium mt-1 text-[#003c90]">Home</span>
         </button>
-        <button className="flex flex-col items-center justify-center text-[#737784] hover:text-[#0f52ba] active:scale-90 transition-transform">
-          <span className="material-symbols-outlined">monitor_heart</span>
+        <button 
+          onClick={() => router.push('/patient-app/vitals')}
+          className="flex flex-col items-center justify-center text-[#737784] hover:text-[#0f52ba] active:scale-90 transition-transform"
+        >
+          <HeartPulse className="w-6 h-6" />
           <span className="font-manrope text-[11px] font-medium mt-1">Vitals</span>
         </button>
-        <button 
+        <button
           onClick={() => router.push('/patient-app/games')}
           className="flex flex-col items-center justify-center text-[#737784] hover:text-[#0f52ba] active:scale-90 transition-transform">
-          <span className="material-symbols-outlined">sports_esports</span>
+          <Gamepad2 className="w-6 h-6" />
           <span className="font-manrope text-[11px] font-medium mt-1">Games</span>
         </button>
-        <button className="flex flex-col items-center justify-center text-[#737784] hover:text-[#0f52ba] active:scale-90 transition-transform">
-          <span className="material-symbols-outlined">person</span>
+        <button 
+          onClick={() => router.push('/patient-app/profile')}
+          className="flex flex-col items-center justify-center text-[#737784] hover:text-[#0f52ba] active:scale-90 transition-transform"
+        >
+          <User className="w-6 h-6" />
           <span className="font-manrope text-[11px] font-medium mt-1">Profile</span>
         </button>
       </nav>

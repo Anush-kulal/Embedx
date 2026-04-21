@@ -73,7 +73,7 @@ export default function PatientApp() {
   const recognitionRef = useRef(null);
 
   // TWILIO / FIREBASE INTEGRATION POINT
-  const triggerSOS = useCallback(() => {
+  const triggerSOS = useCallback(async () => {
     console.log(`[EXTERNAL] Dispatching Emergency for ${userMode} Mode.`);
 
     // Twilio SMS Alert Integration

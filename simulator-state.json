@@ -1,5 +1,5 @@
 {
   "status": "safe",
   "lights": "amber",
-  "door": "locked"
+  "door": "unlocked"
 }

@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 
 // Configuration for Multi-User Modes
 const MODES = {
@@ -62,6 +63,7 @@ function usePatientState(timeout) {
 }
 
 export default function PatientApp() {
+  const router = useRouter();
   const [userMode, setUserMode] = useState('ELDER');
   const currentMode = MODES[userMode];
   
@@ -168,10 +170,24 @@ export default function PatientApp() {
         <h1 className="text-5xl font-black text-white mb-4 drop-shadow-sm leading-tight max-w-xs mx-auto">
           {currentMode.messages[state]}
         </h1>
-        <p className="text-white/60 text-sm font-mono tracking-tighter">
+        <p className="text-white/60 text-sm font-mono tracking-tighter mb-8">
           {state === 'AWAITING_VOICE' ? 'Checking for your response...' : 
            state !== 'CRITICAL_ALERT' ? `Active Monitoring: ${currentMode.timeout - seconds}s` : 'EMERGENCY TRIGGERED'}
         </p>
+
+        {/* Games Button - Centered below text to avoid SOS button collision */}
+        <div onClick={(e) => e.stopPropagation()}>
+          <button 
+            onClick={() => router.push('/patient-app/games')}
+            className="inline-flex items-center justify-center gap-3 px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-[1.5rem] border border-white/20 transition-all shadow-lg active:scale-95"
+          >
+            <span className="text-3xl drop-shadow-md">🎮</span>
+            <div className="flex flex-col text-left">
+              <span className="text-[11px] font-bold uppercase tracking-widest text-white/90">Activities</span>
+              <span className="text-base font-black text-white leading-none mt-1">Play Games</span>
+            </div>
+          </button>
+        </div>
       </div>
 
       {state === 'AWAITING_VOICE' && (

@@ -66,7 +66,7 @@ export default function PatientApp() {
   const router = useRouter();
   const [userMode, setUserMode] = useState('ELDER');
   const currentMode = MODES[userMode];
-  
+
   const { state, setState, reset, seconds } = usePatientState(currentMode.timeout);
   const [tapCount, setTapCount] = useState(0);
   const [showDebug, setShowDebug] = useState(false);
@@ -75,7 +75,7 @@ export default function PatientApp() {
   // TWILIO / FIREBASE INTEGRATION POINT
   const triggerSOS = useCallback(async () => {
     console.log(`[EXTERNAL] Dispatching Emergency for ${userMode} Mode.`);
-    
+
     // Twilio SMS Alert Integration
     try {
       const response = await fetch('/api/send-alert', {
@@ -125,7 +125,7 @@ export default function PatientApp() {
       };
 
       recognition.onerror = (err) => console.error("Speech Error:", err);
-      
+
       try {
         recognition.start();
         recognitionRef.current = recognition;
@@ -165,11 +165,11 @@ export default function PatientApp() {
   const ui = states[state];
 
   return (
-    <div 
+    <div
       className={`h-screen w-full flex flex-col items-center justify-center p-6 transition-all duration-700 ${ui.color}`}
       onClick={() => !showDebug && reset()}
     >
-      <button 
+      <button
         onClick={(e) => { e.stopPropagation(); router.push('/patient-app'); }}
         className="absolute top-8 left-8 z-20 flex items-center gap-2 bg-black/20 hover:bg-black/40 text-white px-5 py-2.5 rounded-full backdrop-blur-md transition-all text-sm font-bold tracking-wider hover:scale-105 active:scale-95"
       >
@@ -198,12 +198,12 @@ export default function PatientApp() {
           {currentMode.messages[state]}
         </h1>
         <p className="text-white/60 text-sm font-mono tracking-tighter mb-8">
-          {state === 'AWAITING_VOICE' ? 'Checking for your response...' : 
-           state !== 'CRITICAL_ALERT' ? `Active Monitoring: ${currentMode.timeout - seconds}s` : 'EMERGENCY TRIGGERED'}
+          {state === 'AWAITING_VOICE' ? 'Checking for your response...' :
+            state !== 'CRITICAL_ALERT' ? `Active Monitoring: ${currentMode.timeout - seconds}s` : 'EMERGENCY TRIGGERED'}
         </p>
 
         {/* Games Button - Centered below text to avoid SOS button collision */}
-        <div onClick={(e) => e.stopPropagation()}>
+        {/* <div onClick={(e) => e.stopPropagation()}>
           <button 
             onClick={() => router.push('/patient-app/games')}
             className="inline-flex items-center justify-center gap-3 px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-[1.5rem] border border-white/20 transition-all shadow-lg active:scale-95"
@@ -214,7 +214,7 @@ export default function PatientApp() {
               <span className="text-base font-black text-white leading-none mt-1">Play Games</span>
             </div>
           </button>
-        </div>
+        </div> */}
       </div>
 
       {state === 'AWAITING_VOICE' && (
@@ -225,7 +225,7 @@ export default function PatientApp() {
         </div>
       )}
 
-      <button 
+      <button
         onClick={(e) => { e.stopPropagation(); setState('CRITICAL_ALERT'); }}
         className="absolute bottom-20 w-40 h-40 bg-white text-rose-600 rounded-full shadow-[0_0_60px_rgba(225,29,72,0.4)] flex flex-col items-center justify-center border-[12px] border-rose-600/10 active:scale-95 transition-all z-20"
       >

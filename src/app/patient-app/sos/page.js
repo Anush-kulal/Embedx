@@ -69,35 +69,25 @@ export default function PatientApp() {
   
   const { state, setState, reset, seconds } = usePatientState(currentMode.timeout);
   const [tapCount, setTapCount] = useState(0);
-  const [location, setLocation] = useState(null);
-
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        (err) => console.log("Geolocation error:", err)
-      );
-    }
-  }, []);
+  const [showDebug, setShowDebug] = useState(false);
+  const recognitionRef = useRef(null);
 
   // TWILIO / FIREBASE INTEGRATION POINT
   const triggerSOS = useCallback(() => {
     console.log(`[EXTERNAL] Dispatching Emergency for ${userMode} Mode.`);
-    if (location) console.log(`[EXTERNAL] Location attached: ${location.lat}, ${location.lng}`);
-    // Future: Firebase.updateDoc(patientRef, { status: 'CRITICAL', location })
-  }, [userMode, location]);
+    // Future: Firebase.updateDoc(patientRef, { status: 'CRITICAL' })
+  }, [userMode]);
 
   useEffect(() => {
     // Broadcast status to dashboard for real-time demo
     localStorage.setItem('sentinel_status', JSON.stringify({
       state,
       mode: userMode,
-      timestamp: Date.now(),
-      location: state === 'CRITICAL_ALERT' ? location : null
+      timestamp: Date.now()
     }));
 
     if (state === 'CRITICAL_ALERT') triggerSOS();
-  }, [state, userMode, triggerSOS, location]);
+  }, [state, userMode, triggerSOS]);
 
   // WEB SPEECH API INTEGRATION (Voice Reset)
   useEffect(() => {

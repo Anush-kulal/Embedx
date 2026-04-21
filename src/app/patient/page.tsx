@@ -1,11 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ShieldCheck, ShieldAlert, Activity, Settings2, ChevronUp } from "lucide-react";
 
 export default function PatientPage() {
   const [status, setStatus] = useState<"safe" | "panic" | "inactive">("safe");
   const [devMenuOpen, setDevMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch('/api/home-state');
+        const data = await res.json();
+        if (data.status) setStatus(data.status);
+      } catch (e) {
+        console.error(e);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const updateStatus = async (newStatus: "safe" | "panic" | "inactive") => {
+    setStatus(newStatus);
+    await fetch('/api/update-status', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus })
+    });
+  };
 
   const StatusDisplay = () => {
     switch (status) {
@@ -73,19 +95,19 @@ export default function PatientPage() {
               
               <div className="grid grid-cols-1 gap-3">
                 <button 
-                  onClick={() => setStatus("safe")}
+                  onClick={() => updateStatus("safe")}
                   className="px-4 py-4 rounded-xl bg-zinc-800/50 hover:bg-zinc-700/50 text-white font-medium transition-colors border border-zinc-700"
                 >
                   Reset to Safe
                 </button>
                 <button 
-                  onClick={() => setStatus("inactive")}
+                  onClick={() => updateStatus("inactive")}
                   className="px-4 py-4 rounded-xl bg-amber-950/30 hover:bg-amber-900/50 text-amber-500 font-medium transition-colors border border-amber-900/50"
                 >
                   Force Inactive
                 </button>
                 <button 
-                  onClick={() => setStatus("panic")}
+                  onClick={() => updateStatus("panic")}
                   className="px-4 py-4 rounded-xl bg-red-950/30 hover:bg-red-900/50 text-red-500 font-medium transition-colors border border-red-900/50"
                 >
                   Force Panic

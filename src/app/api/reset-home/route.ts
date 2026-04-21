@@ -1,19 +1,16 @@
-import fs from 'fs';
-import path from 'path';
-
-const stateFilePath = path.join(process.cwd(), 'simulator-state.json');
+import { updateState } from "@/lib/stateStore";
 
 export async function POST() {
   console.log('[ACTION TRIGGERED]: Resetting Home Environment to Default');
   
-  // Reset state
-  fs.writeFileSync(stateFilePath, JSON.stringify({ 
+  updateState({ 
+    status: 'safe',
     lights: 'harsh_white', 
     door: 'locked' 
-  }));
+  });
 
   return Response.json({
-    status: "success",
+    success: true,
     action: "environment_reset",
   });
 }

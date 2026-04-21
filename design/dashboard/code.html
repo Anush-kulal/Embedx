@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AuraCare Premium Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#a8391f",
+                    "secondary-dim": "#744a00",
+                    "on-error-container": "#6e0a12",
+                    "on-secondary-fixed": "#5a3800",
+                    "tertiary-container": "#f87354",
+                    "primary-dim": "#005d61",
+                    "outline": "#747c7e",
+                    "background": "#f8fafb",
+                    "on-primary-container": "#005b5f",
+                    "primary-fixed": "#94f2f7",
+                    "surface": "#f8fafb",
+                    "inverse-on-surface": "#9a9d9e",
+                    "surface-variant": "#dce4e6",
+                    "surface-container-highest": "#dce4e6",
+                    "secondary-fixed-dim": "#ffcb89",
+                    "surface-dim": "#d4dbde",
+                    "error-container": "#fa746f",
+                    "primary": "#006a6e",
+                    "on-surface-variant": "#596063",
+                    "tertiary-fixed": "#f87354",
+                    "surface-container": "#eaeff0",
+                    "on-primary-fixed-variant": "#00666a",
+                    "secondary-fixed": "#ffddb5",
+                    "inverse-primary": "#97f5fa",
+                    "secondary-container": "#ffddb5",
+                    "error-dim": "#67040d",
+                    "tertiary-dim": "#982e14",
+                    "secondary": "#845500",
+                    "on-tertiary-container": "#400700",
+                    "outline-variant": "#acb3b6",
+                    "on-tertiary": "#fff7f6",
+                    "tertiary-fixed-dim": "#e76748",
+                    "surface-container-high": "#e3e9eb",
+                    "on-primary-fixed": "#00474a",
+                    "on-secondary-container": "#724900",
+                    "error": "#a83836",
+                    "primary-fixed-dim": "#86e3e8",
+                    "on-error": "#fff7f6",
+                    "on-secondary-fixed-variant": "#7f5200",
+                    "on-background": "#2c3436",
+                    "inverse-surface": "#0b0f10",
+                    "on-surface": "#2c3436",
+                    "on-tertiary-fixed-variant": "#520c00",
+                    "primary-container": "#94f2f7",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f0f4f6",
+                    "on-primary": "#e4feff",
+                    "surface-bright": "#f8fafb",
+                    "on-secondary": "#fff7f3",
+                    "surface-tint": "#006a6e",
+                    "on-tertiary-fixed": "#000000"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Manrope"],
+                    "label": ["Manrope"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #f8fafb;
+            color: #2c3436;
+        }
+        h1, h2, h3, .headline {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl transition-all">
+<div class="flex justify-between items-center w-full px-6 py-3 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold text-[#47A8AD] tracking-tighter font-['Plus_Jakarta_Sans']">AuraCare</span>
+<div class="hidden md:flex gap-6 items-center">
+<button class="text-[#47A8AD] font-bold font-['Plus_Jakarta_Sans']">Dashboard</button>
+<button class="text-slate-500 dark:text-slate-400 font-['Plus_Jakarta_Sans']">Patients</button>
+<button class="text-slate-500 dark:text-slate-400 font-['Plus_Jakarta_Sans']">Schedule</button>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<button class="p-2 hover:bg-white/50 dark:hover:bg-slate-800/50 transition-all rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<button class="p-2 hover:bg-white/50 dark:hover:bg-slate-800/50 transition-all rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant">chat_bubble</span>
+</button>
+<button class="p-2 hover:bg-white/50 dark:hover:bg-slate-800/50 transition-all rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant">help_outline</span>
+</button>
+</div>
+<img alt="Caregiver profile avatar" class="w-10 h-10 rounded-full border-2 border-white object-cover" data-alt="Professional female caregiver portrait with warm smile in soft clinical environment, high key lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATN24WuIqrX9-IYmZuSQk54XeVp_yTqVCb9sH1xex1YZWYPmPBpy9DZdYozvcJKWc8ht3Db_eXvM94y3aqJOwNvN8y6EuoLsaqN8dLkHbU1Xt1wLSmew1JpjAZ_PkTVu9swKgg219T30kehKxjmNmU6-dU5gb2TS9nMDBuUj62UuzdR3risEXONcs4ycu3fx3708HkLcSTIA2c2SWHoP8I4n6YSDWTrWN-yArPKNrJunI1yrLBj3qBmhIIkkZnYsP9J6Lz28x7O8RI"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col py-8 z-40 bg-white dark:bg-slate-900 rounded-r-[3rem] w-72 shadow-[0px_12px_40px_rgba(44,52,54,0.06)] hidden md:flex">
+<div class="px-8 mb-12">
+<h1 class="text-xl font-black text-[#47A8AD] tracking-tight">AuraCare</h1>
+<p class="text-xs text-on-surface-variant font-medium">Premium Caregiving</p>
+</div>
+<nav class="flex-grow flex flex-col gap-2 px-4">
+<a class="flex items-center gap-3 bg-[#47A8AD]/10 text-[#47A8AD] rounded-full px-6 py-3 font-bold transition-all" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="text-sm font-['Plus_Jakarta_Sans']">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-6 py-3 hover:translate-x-1 hover:text-[#47A8AD] transition-all" href="#">
+<span class="material-symbols-outlined">personal_injury</span>
+<span class="text-sm font-['Plus_Jakarta_Sans']">Patients</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-6 py-3 hover:translate-x-1 hover:text-[#47A8AD] transition-all" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-sm font-['Plus_Jakarta_Sans']">Schedule</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-6 py-3 hover:translate-x-1 hover:text-[#47A8AD] transition-all" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="text-sm font-['Plus_Jakarta_Sans']">Activity Logs</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-6 py-3 hover:translate-x-1 hover:text-[#47A8AD] transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-['Plus_Jakarta_Sans']">Settings</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full py-4 rounded-full bg-gradient-to-r from-tertiary-container to-tertiary text-white font-bold text-sm shadow-lg shadow-tertiary/20 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">emergency</span>
+                Emergency Alert
+            </button>
+<div class="mt-8 flex flex-col gap-1">
+<a class="flex items-center gap-3 text-slate-400 px-6 py-2 text-xs hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">contact_support</span> Help Center
+                </a>
+<a class="flex items-center gap-3 text-slate-400 px-6 py-2 text-xs hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">logout</span> Sign Out
+                </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-72 pt-24 px-6 md:px-10 pb-12">
+<div class="max-w-7xl mx-auto">
+<!-- Bento Layout Container -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Center/Left Column -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Patient Status Card (Urgent Pastel) -->
+<section class="bg-error-container/10 p-1 rounded-xl">
+<div class="bg-white rounded-xl p-8 shadow-[0px_12px_40px_rgba(44,52,54,0.06)] relative overflow-hidden">
+<!-- Background Accent -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-error-container/10 rounded-bl-full -mr-16 -mt-16"></div>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 relative z-10">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+<span class="text-xs font-bold tracking-widest text-error uppercase font-headline">Patient Status (Live)</span>
+</div>
+<h2 class="text-3xl font-extrabold text-on-surface leading-tight font-headline">EMERGENCY: SOS Triggered!</h2>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container px-4 py-2 rounded-full text-xs font-bold text-on-surface-variant">Mode: ELDER</span>
+<span class="bg-error text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg shadow-error/20">STATUS: CRITICAL_ALERT</span>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10">
+<div class="bg-surface-container-low p-6 rounded-lg flex items-center gap-4 transition-all hover:bg-surface-container-high">
+<div class="w-12 h-12 rounded-full bg-error-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-medium">Heart Rate</p>
+<p class="text-2xl font-black text-error">142 bpm</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-lg flex items-center gap-4 transition-all hover:bg-surface-container-high">
+<div class="w-12 h-12 rounded-full bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">thermostat</span>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-medium">Room Temp</p>
+<p class="text-2xl font-black text-on-surface">71°F</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Activity Section -->
+<section>
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-bold font-headline">Recent Activity</h3>
+<button class="text-primary text-sm font-bold flex items-center gap-1 hover:underline">
+                                View Full History <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="space-y-4">
+<!-- Activity Item 1 -->
+<div class="group flex items-center gap-6 p-5 bg-white rounded-lg transition-all hover:bg-surface-container-lowest">
+<div class="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-error text-lg" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="flex-grow">
+<p class="font-bold text-on-surface">Panic state triggered</p>
+<p class="text-sm text-on-surface-variant">Main Bedroom - Wearable Device</p>
+</div>
+<span class="text-xs font-medium text-slate-400">2m ago</span>
+</div>
+<!-- Activity Item 2 -->
+<div class="group flex items-center gap-6 p-5 bg-white rounded-lg transition-all hover:bg-surface-container-lowest">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-lg">motion_sensor_active</span>
+</div>
+<div class="flex-grow">
+<p class="font-bold text-on-surface">Motion detected in Kitchen</p>
+<p class="text-sm text-on-surface-variant">Standard morning routine deviation detected</p>
+</div>
+<span class="text-xs font-medium text-slate-400">14m ago</span>
+</div>
+<!-- Activity Item 3 -->
+<div class="group flex items-center gap-6 p-5 bg-white rounded-lg transition-all hover:bg-surface-container-lowest">
+<div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400 text-lg">door_front</span>
+</div>
+<div class="flex-grow">
+<p class="font-bold text-on-surface">Front Door was closed</p>
+<p class="text-sm text-on-surface-variant">Secure lock confirmed</p>
+</div>
+<span class="text-xs font-medium text-slate-400">45m ago</span>
+</div>
+</div>
+</section>
+<!-- Real-time Feed (Asymmetric element) -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm">
+<h4 class="font-bold mb-4 text-on-surface-variant text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">videocam</span> Living Room Feed
+                            </h4>
+<div class="aspect-video bg-slate-200 rounded-lg overflow-hidden relative">
+<img alt="Living room camera feed" class="w-full h-full object-cover opacity-60 grayscale-[30%]" data-alt="Modern bright living room interior with soft shadows and high-end furniture, empty and peaceful, wide angle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUhGPfQIiPM5X9btUwtkv5JNJPU6hpXg8o2-4xhlUiFHs4ufdIc300aMOkad3KYtkaXc50-AY6Ic8X6rQojn4xUY0ntBMkhpmfJIjuBxhRktR_GpMjW4mB0PQHbTwh8OOK2WZLRhSyHG9ETJ-u_W0htvXBHNKNAvMP7HzPzKHRF3UNzHQHufcg8O8gbEADRt46DDHD00WZmj_Ngmc-PBITVqhZLBxhqrcjt_sSL9K2CAjerDjCbsFlTEdLEOdDyhRwmxuV_tucUNSw"/>
+<div class="absolute top-3 left-3 bg-error text-white text-[10px] px-2 py-1 rounded font-bold uppercase">Live</div>
+</div>
+</div>
+<div class="bg-[#47A8AD]/5 rounded-xl p-8 border border-[#47A8AD]/10">
+<h4 class="font-bold mb-2 text-[#47A8AD]">Caregiver Note</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-4 italic">
+                                "Patient reported mild dizziness during breakfast. Monitoring heart rate closely for the next 2 hours."
+                            </p>
+<div class="flex items-center gap-2">
+<img alt="Dr. Sarah" class="w-6 h-6 rounded-full" data-alt="Medical professional face icon, soft focus, bright medical background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAiGKLHVbl269e9TJogbKqWhu_mmNFR_jdxOe2a-KfVohGaqr2pSbGys4x_6r4K-PRUa-0B0u1-pDzUYqueqB2Z5IaFySQ7Vl6xGjixLNHfPVmXy8IM1yJ1bULrOZZV30HKc4o32GLhuEKrZCJaUBHI_wo3C-dTg24h90gEW5xllRQukFtyN7xsNNwP4BKeOooqPXC0Xr_0FLF4h8duiQg3_0CUbEet9RW5RGhVwwY1vzIMi8dOJiBKhFT6dhIul0G1iGDIvkrv_e1"/>
+<span class="text-xs font-bold text-on-surface">Dr. Sarah Mitchell</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Sidebar: Emergency Actions -->
+<div class="lg:col-span-4 space-y-6">
+<div class="bg-white rounded-xl p-8 shadow-[0px_12px_40px_rgba(44,52,54,0.06)] sticky top-24">
+<h3 class="text-xl font-bold font-headline mb-8 flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">bolt</span> Emergency Actions
+                        </h3>
+<div class="space-y-4">
+<!-- Action Card 1 -->
+<button class="w-full group text-left p-5 rounded-lg bg-surface-container-low transition-all hover:bg-primary-container/20 border border-transparent hover:border-primary-container/30">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary">lock_open</span>
+</div>
+<div>
+<p class="font-bold text-on-surface text-sm">Override Smart Lock</p>
+<p class="text-[11px] text-on-surface-variant">Grant entry for first responders</p>
+</div>
+</div>
+</button>
+<!-- Action Card 2 -->
+<button class="w-full group text-left p-5 rounded-lg bg-surface-container-low transition-all hover:bg-secondary-container/20 border border-transparent hover:border-secondary-container/30">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-secondary">flare</span>
+</div>
+<div>
+<p class="font-bold text-on-surface text-sm">Trigger Ambience</p>
+<p class="text-[11px] text-on-surface-variant">Activate soothing lights &amp; sound</p>
+</div>
+</div>
+</button>
+<!-- Action Card 3 (Dispatch) -->
+<button class="w-full group text-left p-5 rounded-lg bg-error-container/10 transition-all hover:bg-error-container/20 border border-error-container/10">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-error">medical_services</span>
+</div>
+<div>
+<p class="font-bold text-on-surface text-sm">Dispatch Medical</p>
+<p class="text-[11px] text-on-surface-variant">Immediate ambulance request</p>
+</div>
+</div>
+</button>
+</div>
+<div class="mt-12 pt-8 border-t border-outline-variant/15">
+<h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-4">Patient Location</h4>
+<div class="h-48 rounded-lg bg-surface-container overflow-hidden">
+<img alt="Patient map location" class="w-full h-full object-cover" data-alt="Abstract soft topographic map of an urban neighborhood with clean teal and white accents" data-location="San Francisco" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD73luKFUmX8DivHwejNFvSctt4lx21rvopAQb87zQ_nhZjSp7u90qGVcZpJzwdkw-S26JH3AE84dmkmzNMR29hN0A5rPPLfa3Iadu6NVP9ICX9wRBAck51oNngEJ78N9w5eqNfeOKHCpOZPrIJD0LCK0GvwcPlZ1dKlpEqdeQWObDs9C2WEc4st1Zetk5rnikD6BhuT29joCuun-m_WUdh0UJxZhnSDbTbc2eXsYbim_Uw7RRSqHynnmyRF4Bv0j9ayw0lDnIZf_JJ"/>
+</div>
+<div class="mt-4 flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-sm mt-0.5">location_on</span>
+<p class="text-xs text-on-surface font-medium">124 Oak Haven Lane, Suite 402<br/>Palo Alto, CA 94301</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-2xl px-6 py-4 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="text-[10px] font-bold">Dashboard</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">personal_injury</span>
+<span class="text-[10px] font-bold">Patients</span>
+</button>
+<div class="relative -top-8">
+<button class="w-14 h-14 bg-error text-white rounded-full flex items-center justify-center shadow-lg shadow-error/30">
+<span class="material-symbols-outlined text-3xl">sos</span>
+</button>
+</div>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-[10px] font-bold">Schedule</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold">Settings</span>
+</button>
+</nav>
+</body></html>

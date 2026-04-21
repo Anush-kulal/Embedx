@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Activity, Bell, Home, LockOpen, Settings, ShieldAlert, ShieldCheck, User } from "lucide-react";
+import { Activity, Bell, Calendar, Home, LockOpen, MessageSquare, HelpCircle, Settings, ShieldAlert, ShieldCheck, User, AlertTriangle, ScanLine, DoorClosed, Thermometer, HeartPulse, Zap } from "lucide-react";
 
 export default function DashboardPage() {
   const [status, setStatus] = useState({ state: 'IDLE', mode: 'ELDER' });
@@ -23,27 +23,26 @@ export default function DashboardPage() {
     };
   }, []);
 
-  const getStatusColor = () => {
-    if (status.state === 'CRITICAL_ALERT') return 'bg-red-500';
-    if (status.state === 'IDLE') return 'bg-emerald-500';
-    return 'bg-amber-500';
-  };
-
   const getStatusText = () => {
     if (status.state === 'CRITICAL_ALERT') return 'EMERGENCY: SOS Triggered!';
     if (status.state === 'INACTIVE_WARNING' || status.state === 'AWAITING_VOICE') return 'Warning: Inactivity Detected';
     return 'Patient is Safe';
   };
 
-  // Restoring missing state derivations and handlers 
-  // to fix "isPanic is not defined" and undefined onClick handlers.
   const isPanic = status.state === 'CRITICAL_ALERT';
-  const isAmber = status.mode === 'THERAPEUTIC'; 
-  const isUnlocked = status.state === 'UNLOCKED'; 
+  const isAmber = status.mode === 'THERAPEUTIC';
+  const isUnlocked = status.state === 'UNLOCKED';
 
   const handleUnlock = async () => {
-    // Implement local storage or API update for unlock
-    console.log("Unlock door requested");
+    try {
+      await fetch('/api/unlock-door', { method: 'POST' });
+      const newStatus = { ...status, state: 'UNLOCKED' };
+      setStatus(newStatus);
+      localStorage.setItem('sentinel_status', JSON.stringify(newStatus));
+      console.log("Unlock door completed");
+    } catch (e) {
+      console.error("Failed to unlock door", e);
+    }
   };
 
   const handleTriggerAmbience = async () => {
@@ -51,171 +50,269 @@ export default function DashboardPage() {
     console.log("Trigger ambience requested");
   };
 
+  const handleDispatchMedical = async () => {
+    console.log("Dispatch medical requested");
+  };
+
   return (
-    <div className="min-h-screen bg-zinc-950 flex font-sans">
+    <div className="min-h-screen bg-[#F8F9FA] flex flex-col font-sans text-slate-800">
 
-      {/* Sidebar Navigation */}
-      <aside className="w-64 bg-zinc-900/50 border-r border-zinc-800/50 flex flex-col backdrop-blur-md">
-        <div className="h-16 flex items-center px-6 border-b border-zinc-800/50">
-          <div className="flex items-center gap-3">
-            <ShieldCheck className="w-6 h-6 text-indigo-400" />
-            <span className="text-zinc-100 font-semibold tracking-tight">Project Sentinel</span>
+      {/* Top Header */}
+      <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-10 sticky top-0">
+        <div className="flex items-center gap-8">
+          <div className="flex items-center gap-1 font-bold text-xl tracking-tight">
+            <span className="text-teal-600">Aura</span>
+            <span className="text-slate-700">Care</span>
           </div>
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+            <a href="#" className="text-teal-600">Dashboard</a>
+            <a href="#" className="text-slate-500 hover:text-slate-800">Patients</a>
+            <a href="#" className="text-slate-500 hover:text-slate-800">Schedule</a>
+          </nav>
         </div>
-
-        <nav className="flex-1 p-4 flex flex-col gap-2">
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-zinc-800/80 text-zinc-100 transition-colors border border-zinc-700/50">
-            <Home className="w-5 h-5 opacity-70" />
-            <span className="font-medium">Dashboard</span>
-          </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-800/40 text-zinc-400 hover:text-zinc-200 transition-colors">
-            <User className="w-5 h-5 opacity-70" />
-            <span className="font-medium">Patients</span>
-          </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-800/40 text-zinc-400 hover:text-zinc-200 transition-colors">
-            <Activity className="w-5 h-5 opacity-70" />
-            <span className="font-medium">Activity Logs</span>
-          </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-800/40 text-zinc-400 hover:text-zinc-200 transition-colors">
-            <Settings className="w-5 h-5 opacity-70" />
-            <span className="font-medium">Settings</span>
-          </a>
-        </nav>
-
-        <div className="p-4 border-t border-zinc-800/50">
-          <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-zinc-900/50 text-zinc-400">
-            <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
-              <span className="text-zinc-300 text-xs font-bold">CG</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-medium text-zinc-200">Caregiver</span>
-              <span className="text-xs text-zinc-500">Active duty</span>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      {/* Main Content Area */}
-      <main className="flex-1 flex flex-col">
-        {/* Top Header */}
-        <header className="h-16 flex items-center justify-between px-8 bg-zinc-900/30 border-b border-zinc-800/50 backdrop-blur-md">
-          <h1 className="text-xl font-semibold text-zinc-100 tracking-tight">Overview</h1>
-          <button className="relative w-10 h-10 rounded-full bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center text-zinc-400 hover:text-zinc-200 transition-colors">
+        <div className="flex items-center gap-4">
+          <button className="text-slate-400 hover:text-slate-600 transition-colors relative">
             <Bell className="w-5 h-5" />
-            {isPanic && <span className="absolute top-2 right-2.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-zinc-900 animate-ping"></span>}
+            {isPanic && <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500 border-2 border-white"></span>}
           </button>
-        </header>
+          <button className="text-slate-400 hover:text-slate-600 transition-colors">
+            <MessageSquare className="w-5 h-5" />
+          </button>
+          <button className="text-slate-400 hover:text-slate-600 transition-colors">
+            <HelpCircle className="w-5 h-5" />
+          </button>
+          <div className="w-8 h-8 rounded-full bg-teal-600 border-2 border-teal-100 flex items-center justify-center overflow-hidden">
+            <User className="w-5 h-5 text-white" />
+          </div>
+        </div>
+      </header>
 
-        {/* Dashboard Grid */}
-        <div className="flex-1 p-8 overflow-y-auto">
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 max-w-7xl mx-auto h-full place-content-start">
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar Navigation */}
+        <aside className="w-64 bg-white flex flex-col pt-6">
+          <nav className="flex-1 px-4 flex flex-col gap-1.5">
+            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-teal-50 text-teal-700 font-medium">
+              <Home className="w-5 h-5" />
+              <span>Dashboard</span>
+            </a>
+            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors font-medium">
+              <User className="w-5 h-5" />
+              <span>Patients</span>
+            </a>
+            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors font-medium">
+              <Calendar className="w-5 h-5" />
+              <span>Schedule</span>
+            </a>
+            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors font-medium">
+              <Activity className="w-5 h-5" />
+              <span>Activity Logs</span>
+            </a>
+            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors font-medium">
+              <Settings className="w-5 h-5" />
+              <span>Settings</span>
+            </a>
+          </nav>
 
-            {/* Central Panel - Patient Status */}
-            <div className="xl:col-span-2 space-y-6">
-              <section className={`rounded-3xl border p-8 backdrop-blur-xl shadow-2xl relative overflow-hidden transition-colors duration-500 ${isPanic ? 'bg-red-950/40 border-red-900/50' : isAmber ? 'bg-amber-950/40 border-amber-900/50' : 'bg-zinc-900/40 border-zinc-800/50'}`}>
-                <div className={`absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none -translate-y-1/2 translate-x-1/2 ${isPanic ? 'bg-red-500/10' : isAmber ? 'bg-amber-500/10' : 'bg-emerald-500/5'}`} />
+          <div className="p-4">
+            <button className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#D92D20] text-white font-medium hover:bg-red-700 transition-colors shadow-sm">
+              <ShieldAlert className="w-4 h-4" />
+              Emergency Alert
+            </button>
+          </div>
 
-                <h2 className="text-lg font-medium text-zinc-400 mb-8 flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full animate-pulse ${isPanic ? 'bg-red-500' : isAmber ? 'bg-amber-500' : 'bg-emerald-500'}`}></span>
-                  Patient Status (Live)
+          <div className="p-4 pt-0">
+            <div className="flex flex-col gap-3 px-4 py-4 mt-2">
+              <a href="#" className="flex items-center gap-3 text-sm text-slate-400 hover:text-slate-600 transition-colors">
+                <HelpCircle className="w-4 h-4" />
+                Help Center
+              </a>
+              <a href="#" className="flex items-center gap-3 text-sm text-slate-400 hover:text-slate-600 transition-colors">
+                <DoorClosed className="w-4 h-4" />
+                Sign Out
+              </a>
+            </div>
+          </div>
+        </aside>
+
+        {/* Main Content Area */}
+        <main className="flex-1 overflow-y-auto p-8 border-l border-slate-200">
+          <div className="flex flex-col xl:flex-row gap-8 max-w-7xl mx-auto items-start">
+
+            {/* Left Column - Central Panel & Activity */}
+            <div className="flex-1 space-y-8 w-full xl:w-auto">
+
+              {/* Patient Status Card */}
+              <section className={`rounded-3xl bg-white p-8 shadow-sm border-[3px] transition-colors duration-500 ${isPanic ? 'border-red-100' : 'border-white'}`}>
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex items-center gap-2 text-sm font-semibold tracking-wide uppercase text-slate-500">
+                    <span className={`w-2 h-2 rounded-full ${isPanic ? 'bg-red-500 animate-pulse' : isAmber ? 'bg-amber-500' : 'bg-emerald-500'}`}></span>
+                    Patient Status (Live)
+                  </div>
+                  <div className="flex flex-col items-end gap-2">
+                    <span className="px-3 py-1 rounded-full bg-slate-100 text-xs font-medium text-slate-600 uppercase tracking-wide">Mode: {status.mode}</span>
+                    <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide text-white ${isPanic ? 'bg-[#B42318]' : 'bg-emerald-600'}`}>
+                      STATUS: {status.state}
+                    </span>
+                  </div>
+                </div>
+
+                <h2 className={`text-4xl font-bold tracking-tight mb-8 ${isPanic ? 'text-slate-900' : 'text-slate-800'}`}>
+                  {getStatusText()}
                 </h2>
 
-                <div className="flex items-start gap-8">
-                  <div className={`w-24 h-24 rounded-2xl border flex items-center justify-center transition-colors duration-500 ${status.state === 'CRITICAL_ALERT' ? 'bg-red-500/10 border-red-500/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}>
-                    {status.state === 'CRITICAL_ALERT' ? (
-                      <ShieldAlert className="w-12 h-12 text-red-400" />
-                    ) : (
-                      <ShieldCheck className="w-12 h-12 text-emerald-400" />
-                    )}
+                <div className="flex gap-4">
+                  <div className="flex-1 bg-red-50 rounded-3xl p-6 flex items-center gap-5 relative overflow-hidden">
+                    <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center shrink-0 z-10">
+                      <HeartPulse className="w-6 h-6 text-[#D92D20]" />
+                    </div>
+                    <div className="z-10">
+                      <span className="block text-sm font-medium text-slate-500 mb-0.5">Heart Rate</span>
+                      <span className="block text-2xl font-bold text-[#B42318]">{isPanic ? '142 bpm' : '72 bpm'}</span>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className={`text-3xl font-semibold mb-2 transition-colors ${status.state === 'CRITICAL_ALERT' ? 'text-red-500' : 'text-zinc-50'}`}>
-                      {getStatusText()}
-                    </h3>
-                    <p className="text-zinc-400 mb-6">
-                      Current Mode: <span className="text-zinc-200 capitalize font-bold">{status.mode}</span> |
-                      Status: <span className="text-zinc-200 uppercase font-black tracking-tighter ml-1">{status.state}</span>
-                    </p>
-
-                    <div className="flex gap-4">
-                      <div className="px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
-                        <span className="block text-xs text-zinc-500 mb-1">Heart Rate</span>
-                        <span className={`text-lg font-medium ${isPanic ? 'text-red-400' : 'text-zinc-200'}`}>{isPanic ? '142 bpm' : '72 bpm'}</span>
-                      </div>
-                      <div className="px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
-                        <span className="block text-xs text-zinc-500 mb-1">Room Temp</span>
-                        <span className="text-lg font-medium text-zinc-200">71°F</span>
-                      </div>
+                  <div className="flex-1 bg-teal-50/50 rounded-3xl p-6 flex items-center gap-5 relative overflow-hidden">
+                    <div className="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center shrink-0 z-10">
+                      <Thermometer className="w-6 h-6 text-teal-600" />
+                    </div>
+                    <div className="z-10">
+                      <span className="block text-sm font-medium text-slate-500 mb-0.5">Room Temp</span>
+                      <span className="block text-2xl font-bold text-slate-800">71°F</span>
                     </div>
                   </div>
                 </div>
               </section>
 
-              {/* Activity Timeline (Mock) */}
-              <section className="bg-zinc-900/40 rounded-3xl border border-zinc-800/50 p-8 backdrop-blur-xl">
-                <h2 className="text-lg font-medium text-zinc-400 mb-6">Recent Activity</h2>
+              {/* Activity & Feeds */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-slate-800">Recent Activity</h2>
+                  <a href="#" className="text-sm font-medium text-teal-600 hover:text-teal-700">View Full History →</a>
+                </div>
+
                 <div className="space-y-4">
-                  {[
-                    { time: "Just now", event: isPanic ? "Panic state triggered" : isAmber ? "Therapeutic Lights deployed" : "System stable" },
-                    { time: "10:42 AM", event: "Motion detected in Kitchen" },
-                    { time: "09:15 AM", event: "Front Door was closed" },
-                  ].map((log, i) => (
-                    <div key={i} className="flex items-center gap-4 text-sm">
-                      <span className="text-zinc-500 w-20">{log.time}</span>
-                      <div className="w-2 h-2 rounded-full bg-zinc-700"></div>
-                      <span className="text-zinc-300">{log.event}</span>
+                  {(isPanic ? [{ type: 'panic', title: 'Panic state triggered', detail: 'Main Bedroom - Wearable Device', time: '2m ago' }] : []).concat([
+                    { type: 'motion', title: 'Motion detected in Kitchen', detail: 'Standard morning routine deviation detected', time: '14m ago' },
+                    { type: 'door', title: 'Front Door was closed', detail: 'Secure lock confirmed', time: '45m ago' }
+                  ]).map((log, i) => (
+                    <div key={i} className="bg-white rounded-2xl p-5 flex items-center gap-4 shadow-sm">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0
+                        ${log.type === 'panic' ? 'bg-red-50 text-red-500' :
+                          log.type === 'motion' ? 'bg-teal-50 text-teal-600' :
+                            'bg-slate-100 text-slate-400'}`}>
+                        {log.type === 'panic' && <AlertTriangle className="w-5 h-5" />}
+                        {log.type === 'motion' && <ScanLine className="w-5 h-5" />}
+                        {log.type === 'door' && <DoorClosed className="w-5 h-5" />}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-base font-semibold text-slate-800">{log.title}</h4>
+                        <p className="text-sm text-slate-500">{log.detail}</p>
+                      </div>
+                      <span className="text-sm text-slate-400 font-medium whitespace-nowrap">{log.time}</span>
                     </div>
                   ))}
                 </div>
-              </section>
+              </div>
+
+              {/* Bottom Row - Video Feed & Note */}
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex-1 bg-white rounded-3xl p-6 shadow-sm">
+                  <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                    <span className="w-3 h-2 rounded-[2px] bg-slate-400 uppercase"></span>
+                    Living Room Feed
+                  </h3>
+                  <div className="relative rounded-2xl overflow-hidden aspect-video bg-slate-200">
+                    <img src="https://images.unsplash.com/photo-1554995207-c18c203602cb?q=80&w=1000&auto=format&fit=crop" alt="Living Room Feed" className="w-full h-full object-cover" />
+                    <div className="absolute top-3 left-3 bg-[#D92D20] text-white text-[10px] font-bold px-2 py-0.5 rounded tracking-wide">LIVE</div>
+                  </div>
+                </div>
+                <div className="flex-1 bg-[#F0F9FF] rounded-3xl p-6 shadow-sm flex flex-col">
+                  <h3 className="text-teal-600 font-semibold mb-3">Caregiver Note</h3>
+                  <p className="text-slate-600 text-sm italic leading-relaxed flex-1">
+                    "Patient reported mild dizziness during breakfast. Monitoring heart rate closely for the next 2 hours."
+                  </p>
+                  <div className="flex items-center gap-3 mt-4">
+                    <div className="w-8 h-8 rounded-full bg-teal-600 border border-teal-200 flex items-center justify-center overflow-hidden">
+                      <User className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-sm font-medium text-slate-800">Dr. Sarah Mitchell</span>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
-            {/* Side Widget - Emergency Actions */}
-            <div className="space-y-6">
-              <section className="bg-zinc-900/40 rounded-3xl border border-zinc-800/50 p-6 backdrop-blur-xl relative overflow-hidden">
-                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-red-500/50 to-amber-500/50"></div>
-                <h2 className="text-lg font-medium text-zinc-100 mb-6 flex items-center gap-2">
-                  <ShieldAlert className="w-5 h-5 text-red-400" />
-                  Emergency Actions
+            {/* Right Column - Side Widget */}
+            <div className="w-full xl:w-[320px] shrink-0 space-y-6">
+
+              <div className="bg-white rounded-[32px] p-6 shadow-sm border border-slate-100 flex flex-col gap-6">
+                <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                  <span className="text-[#D92D20]"><Zap className="w-6 h-6 fill-current" /></span>
+                  Emergency <br /> Actions
                 </h2>
 
-                <div className="space-y-4">
-                  <button onClick={handleUnlock} className="w-full relative group overflow-hidden rounded-2xl bg-red-950/20 border border-red-900/50 p-4 transition-all hover:bg-red-950/40 hover:border-red-500/50 hover:shadow-[0_0_20px_-5px_rgba(239,68,68,0.3)]">
-                    <div className="relative z-10 flex flex-col items-center justify-center gap-2">
-                      <LockOpen className={`w-8 h-8 ${isUnlocked ? 'text-green-500' : 'text-red-500'} drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]`} />
-                      <span className={`${isUnlocked ? 'text-green-500' : 'text-red-500'} font-semibold tracking-tight`}>
-                        {isUnlocked ? "Door Unlocked!" : "Override Smart Lock"}
+                <div className="space-y-3">
+                  <button onClick={handleUnlock} className="w-full text-left rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors p-4 flex gap-4 items-center group">
+                    <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center shrink-0">
+                      <LockOpen className={`w-5 h-5 ${isUnlocked ? 'text-green-500' : 'text-teal-600'}`} />
+                    </div>
+                    <div>
+                      <span className="block text-[15px] font-semibold text-slate-800 group-hover:text-teal-700 transition-colors">
+                        {isUnlocked ? "Door Unlocked" : "Override Smart Lock"}
                       </span>
-                      <span className="text-xs text-red-400/70 text-center">Instantly unlocks the front door for emergency responders.</span>
+                      <span className="block text-[13px] text-slate-500 mt-0.5 leading-snug">Grant entry for first responders</span>
                     </div>
                   </button>
 
-                  <button onClick={handleTriggerAmbience} className="w-full flex items-center gap-3 rounded-2xl bg-amber-950/10 border border-amber-900/30 p-4 transition-all hover:bg-amber-950/30 hover:border-amber-500/40">
-                    <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center">
-                      <Bell className="w-5 h-5 text-amber-500" />
+                  <button onClick={handleTriggerAmbience} className="w-full text-left rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors p-4 flex gap-4 items-center group">
+                    <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center shrink-0">
+                      <Bell className="w-5 h-5 text-amber-600" />
                     </div>
-                    <div className="text-left flex-1">
-                      <span className="block text-zinc-200 font-medium tracking-tight">Trigger Ambience</span>
-                      <span className="block text-xs text-zinc-500">Flash amber lights</span>
+                    <div>
+                      <span className="block text-[15px] font-semibold text-slate-800 group-hover:text-amber-700 transition-colors">Trigger Ambience</span>
+                      <span className="block text-[13px] text-slate-500 mt-0.5 leading-snug">Activate soothing lights & sound</span>
                     </div>
                   </button>
 
-                  <button className="w-full flex items-center gap-3 rounded-2xl bg-zinc-800/20 border border-zinc-700/30 p-4 transition-all hover:bg-zinc-800/50">
-                    <div className="w-10 h-10 rounded-full bg-zinc-700/50 flex items-center justify-center">
-                      <Activity className="w-5 h-5 text-zinc-300" />
+                  <button onClick={handleDispatchMedical} className="w-full text-left rounded-2xl bg-red-50 hover:bg-red-100 transition-colors p-4 flex gap-4 items-center group">
+                    <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center shrink-0">
+                      <HeartPulse className="w-5 h-5 text-[#D92D20]" />
                     </div>
-                    <div className="text-left flex-1">
-                      <span className="block text-zinc-200 font-medium tracking-tight">Dispatch Medical</span>
-                      <span className="block text-xs text-zinc-500">Call designated emergency contact</span>
+                    <div>
+                      <span className="block text-[15px] font-semibold text-slate-800 group-hover:text-[#D92D20] transition-colors">Dispatch Medical</span>
+                      <span className="block text-[13px] text-slate-500 mt-0.5 leading-snug">Immediate ambulance request</span>
                     </div>
                   </button>
                 </div>
-              </section>
+
+                <div className="pt-2 border-t border-slate-100">
+                  <h3 className="text-xs font-bold tracking-wider text-slate-400 uppercase mb-4">Patient Location</h3>
+                  <div className="bg-slate-200 rounded-2xl h-48 overflow-hidden relative shadow-inner mb-4">
+                    <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=600&auto=format&fit=crop" alt="Map Location" className="w-full h-full object-cover" />
+                    {/* Overlay pin centered */}
+                    <div className="absolute inset-0 flex items-center justify-center drop-shadow-lg">
+                      <div className="w-12 h-12 bg-[#D92D20] rounded-t-full rounded-bl-full rotate-45 flex items-center justify-center border-4 border-white shadow-md">
+                        <User className="w-5 h-5 text-white -rotate-45" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex gap-3 items-start px-1">
+                    <div className="w-5 h-5 rounded-full bg-teal-100 flex items-center justify-center mt-0.5">
+                      <span className="w-2 h-2 rounded-full bg-teal-600"></span>
+                    </div>
+                    <p className="text-sm font-medium text-slate-700 leading-tight">
+                      124 Oak Haven Lane, Suite 402<br />
+                      <span className="text-slate-500 text-xs font-normal">Palo Alto, CA 94301</span>
+                    </p>
+                  </div>
+                </div>
+
+              </div>
             </div>
 
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }
+

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HealthSync Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Public+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background-color: #f7f9fb;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#f7f9fb",
+                      "surface-tint": "#1d59c1",
+                      "primary-fixed": "#d9e2ff",
+                      "on-background": "#191c1e",
+                      "background": "#f7f9fb",
+                      "tertiary-fixed-dim": "#ffb4aa",
+                      "on-primary-fixed": "#001945",
+                      "error-container": "#ffdad6",
+                      "surface-variant": "#e0e3e5",
+                      "on-primary-fixed-variant": "#00419c",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-bright": "#f7f9fb",
+                      "inverse-surface": "#2d3133",
+                      "on-secondary-fixed-variant": "#374951",
+                      "on-error": "#ffffff",
+                      "surface-container-low": "#f2f4f6",
+                      "primary-container": "#0f52ba",
+                      "on-secondary-container": "#55676f",
+                      "tertiary-container": "#b40009",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#ffdad5",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed-dim": "#b6cad2",
+                      "on-surface": "#191c1e",
+                      "on-tertiary-container": "#ffbfb6",
+                      "primary-fixed-dim": "#b0c6ff",
+                      "secondary-container": "#d2e6ef",
+                      "on-surface-variant": "#434653",
+                      "error": "#ba1a1a",
+                      "surface-dim": "#d8dadc",
+                      "on-secondary-fixed": "#0b1e24",
+                      "surface-container-high": "#e6e8ea",
+                      "inverse-on-surface": "#eff1f3",
+                      "secondary-fixed": "#d2e6ef",
+                      "on-secondary": "#ffffff",
+                      "surface-container": "#eceef0",
+                      "outline-variant": "#c3c6d5",
+                      "on-primary-container": "#bcceff",
+                      "on-error-container": "#93000a",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-tertiary-fixed-variant": "#930005",
+                      "on-tertiary-fixed": "#410001",
+                      "secondary": "#4f6169",
+                      "inverse-primary": "#b0c6ff",
+                      "primary": "#003c90",
+                      "outline": "#737784",
+                      "tertiary": "#880005"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "4px",
+                      "margin-mobile": "20px",
+                      "2xl": "48px",
+                      "xl": "32px",
+                      "md": "16px",
+                      "gutter": "12px",
+                      "sm": "8px",
+                      "lg": "24px",
+                      "xs": "4px"
+              },
+              "fontFamily": {
+                      "label-md": ["Public Sans"],
+                      "body-sm": ["Public Sans"],
+                      "body-md": ["Public Sans"],
+                      "headline-md": ["Manrope"],
+                      "label-lg": ["Public Sans"],
+                      "headline-lg": ["Manrope"],
+                      "body-lg": ["Public Sans"],
+                      "headline-sm": ["Manrope"]
+              },
+              "fontSize": {
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                      "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface">
+<!-- TopAppBar -->
+<header class="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 fixed top-0 w-full z-50 h-16 flex justify-between items-center px-5 docked full-width top-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-700 dark:text-blue-400" data-icon="anchor">anchor</span>
+<h1 class="text-blue-700 dark:text-blue-400 font-extrabold text-xl tracking-tight font-manrope">HealthSync</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-tertiary-container text-white px-4 py-1.5 rounded-full font-bold text-sm tracking-wider active:scale-95 transition-transform duration-150 shadow-lg shadow-tertiary-container/20">
+                SOS
+            </button>
+</div>
+</header>
+<main class="pt-24 pb-28 px-5 max-w-screen-md mx-auto">
+<!-- Quick Action Grid (As requested: 4 prominent action buttons) -->
+<div class="grid grid-cols-2 gap-gutter mb-lg">
+<button class="flex flex-col items-center justify-center bg-white border border-secondary-container p-6 rounded-2xl hover:bg-slate-50 transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-primary text-4xl mb-2" data-icon="sports_esports">sports_esports</span>
+<span class="font-label-lg text-label-lg text-primary">Game</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-error-container border border-error/10 p-6 rounded-2xl hover:bg-error-container/80 transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-error text-4xl mb-2" data-icon="emergency_home" style="font-variation-settings: 'FILL' 1;">emergency_home</span>
+<span class="font-label-lg text-label-lg text-error">SOS</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-white border border-secondary-container p-6 rounded-2xl hover:bg-slate-50 transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-primary text-4xl mb-2" data-icon="monitor_heart">monitor_heart</span>
+<span class="font-label-lg text-label-lg text-primary text-center">Heart Rate Checker</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-white border border-secondary-container p-6 rounded-2xl hover:bg-slate-50 transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-primary text-4xl mb-2" data-icon="anchor">anchor</span>
+<span class="font-label-lg text-label-lg text-primary">Anchor</span>
+</button>
+</div>
+<!-- Current Vitals Summary (Bento-style Cards) -->
+<section class="mb-lg">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-md">Current Vitals</h2>
+<div class="grid grid-cols-4 grid-rows-2 gap-gutter h-64">
+<div class="col-span-2 row-span-2 bg-white border border-secondary-container rounded-2xl p-md flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center gap-2 text-primary mb-1">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-label-md text-label-md">Heart Rate</span>
+</div>
+<p class="font-headline-lg text-headline-lg text-on-surface">72 <span class="text-body-sm font-body-sm text-outline">bpm</span></p>
+</div>
+<div class="h-16 w-full bg-blue-50 rounded-lg overflow-hidden relative">
+<div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary to-transparent"></div>
+<img class="w-full h-full object-cover mix-blend-multiply" data-alt="minimalist EKG heart rate line graph with smooth blue waves on a clean white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQgoTYP3osi-u2yVAblSXRFm1YAiCUH4gJCSx8Lxy95j_sUWkh3m_VPkJZ4MRO-8Q1cxpZ7AJiqeBoBtAkbqvhK88-_ug5genmVTqu9qcRfHA9RD3CQ5P4pLh5Yi8bugWf0_fuJOvTNlw8xdWurQdary3py18DhE_widyFnR1hXyhc-MS2lOv0-ANsoDv3uaHTTAFsMCIX8qSnfLI9yCj22NVmHXGrxVD3s62w-8Go5-YaToAw7gHeivP-btmmnR5l9NrBBkitJsWS"/>
+</div>
+</div>
+<div class="col-span-2 bg-white border border-secondary-container rounded-2xl p-md flex items-center justify-between shadow-sm">
+<div>
+<div class="flex items-center gap-2 text-primary mb-1">
+<span class="material-symbols-outlined" data-icon="compress">compress</span>
+<span class="font-label-md text-label-md">Pressure</span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface">120/80</p>
+</div>
+<span class="material-symbols-outlined text-green-500 text-3xl" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="col-span-2 bg-white border border-secondary-container rounded-2xl p-md flex items-center justify-between shadow-sm">
+<div>
+<div class="flex items-center gap-2 text-primary mb-1">
+<span class="material-symbols-outlined" data-icon="water_drop">water_drop</span>
+<span class="font-label-md text-label-md">Oxygen</span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface">98%</p>
+</div>
+<span class="material-symbols-outlined text-green-500 text-3xl" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+</section>
+<!-- Health Insights -->
+<section class="mb-lg">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-md">Health Insights</h2>
+<div class="bg-primary-container text-on-primary-container p-6 rounded-2xl relative overflow-hidden shadow-xl shadow-primary-container/10">
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-lg text-label-lg">Daily Summary</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-white mb-2">Your recovery is excellent today</h3>
+<p class="font-body-md text-body-md text-blue-100 opacity-90">Based on your sleep quality and lower resting heart rate, today is a great day for moderate exercise.</p>
+</div>
+<div class="absolute -right-12 -bottom-12 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+</div>
+</section>
+<!-- Wellness Tips (Horizontal Scroll) -->
+<section class="mb-lg">
+<div class="flex justify-between items-end mb-md">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Wellness Tips</h2>
+<button class="text-primary font-label-lg text-label-lg">View All</button>
+</div>
+<div class="flex gap-gutter overflow-x-auto pb-4 -mx-5 px-5 no-scrollbar">
+<div class="flex-none w-64 bg-white border border-secondary-container rounded-2xl overflow-hidden shadow-sm">
+<div class="h-32 bg-slate-100">
+<img class="w-full h-full object-cover" data-alt="peaceful woman meditating in a bright sunlit room with soft airy lighting and minimalist decor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9eIXOxymOVZqxs3ZKuCl9crTE-0wWo7AFCRBFL3fzJLLQOyToKiGVPHuw2zcDOn9L3qQj6y0I5UW_XM5nHK06C5tACDUmVFjOfqjjlzQP0sCmWNQ884wXVIcmO3up0nKZyyYB6iEii0mUjBO47W_VvBbJeTdC5fexBEGl634sg87cuJZwxsg9OdIyMU6H2Dd0_miK0woWfhP8vRibj2AeQyZUEFCST148uGJyU8QeurVA7E3dM9C7IjIUx4FHN5jMWtReflaiXlHs"/>
+</div>
+<div class="p-md">
+<span class="font-label-md text-label-md text-primary mb-1 block">MINDFULNESS</span>
+<p class="font-body-md text-body-md font-semibold text-on-surface line-clamp-1">5-Minute Stress Reliever</p>
+</div>
+</div>
+<div class="flex-none w-64 bg-white border border-secondary-container rounded-2xl overflow-hidden shadow-sm">
+<div class="h-32 bg-slate-100">
+<img class="w-full h-full object-cover" data-alt="vibrant healthy mediterranean meal with avocado salmon and fresh greens on a clean white plate with natural side lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWlzEQzKFUXQyOGpky4SgXpvZrkAUrOUHS3xAm3uy911MJ9nwT7Wdr-a7UbNxlbNymiHVEpPde6vRPwcYKf-JybDxgUXDRGpVeltBOydqqqmkY1zbLpL0RNjBfXRHANx5NLMFIJlLGZpn7EJecUUw8-9P1wXG14j0t29RBzvSlQWFgsMxfDcLB1sqanU6JPtDU9xP098MYPlBMo2KwvzUQs0qaxWSEKoKRv0wGypEm-wmqYUb3AOgU5F5ROHsagCvv5vsqCfzNSWrE"/>
+</div>
+<div class="p-md">
+<span class="font-label-md text-label-md text-primary mb-1 block">NUTRITION</span>
+<p class="font-body-md text-body-md font-semibold text-on-surface line-clamp-1">Best Foods for Focus</p>
+</div>
+</div>
+<div class="flex-none w-64 bg-white border border-secondary-container rounded-2xl overflow-hidden shadow-sm">
+<div class="h-32 bg-slate-100">
+<img class="w-full h-full object-cover" data-alt="cozy modern bedroom at night with warm dim lighting and serene atmosphere for restful sleep" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlNHQBxcmqvjELiDjQkRIslwGEOtmcxaWXeslJ8A7C2iUtlLUMDg4XVy_Svaqs5AuFgVRfKRUXpAQe3krYKr0u0hP4Yogs4DZVrLDzcqb57b1yXPgJalXq25hz3xA6KhzE1Y-W0EiDJpV2pg1OltXcrec_qEQ691V9Z8Vn12tFrfI4nOFlLdl0U9AI2JJoziMrRdpBrJw9Moc8FY5uOv5mHJNqHNORIG4_HefDF7cE57phQbXQvOU1eB42eJk4Y29rIKvMH7DN32kc"/>
+</div>
+<div class="p-md">
+<span class="font-label-md text-label-md text-primary mb-1 block">SLEEP</span>
+<p class="font-body-md text-body-md font-semibold text-on-surface line-clamp-1">Optimizing Your Routine</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 px-4 pb-safe bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 shadow-[0_-4px_12px_rgba(15,82,186,0.05)] rounded-t-2xl">
+<button class="flex flex-col items-center justify-center text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 rounded-xl px-4 py-1 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-manrope text-[11px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-300 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="monitor_heart">monitor_heart</span>
+<span class="font-manrope text-[11px] font-medium">Vitals</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-300 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="sports_esports">sports_esports</span>
+<span class="font-manrope text-[11px] font-medium">Games</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-300 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-manrope text-[11px] font-medium">Profile</span>
+</button>
+</nav>
+</body></html>

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Activity, Bell, Calendar, Home, LockOpen, MessageSquare, HelpCircle, Settings, ShieldAlert, ShieldCheck, User, AlertTriangle, ScanLine, DoorClosed, Thermometer, HeartPulse, Zap } from "lucide-react";
 
 export default function DashboardPage() {
-  const [status, setStatus] = useState({ state: 'IDLE', mode: 'ELDER' });
+  const [status, setStatus] = useState({ state: 'LOCKED', mode: 'NORMAL' });
   const [heartRate, setHeartRate] = useState(72);
   const [roomTemp, setRoomTemp] = useState(71.2);
 
@@ -123,52 +123,6 @@ export default function DashboardPage() {
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar Navigation 
-        <aside className="w-64 bg-white flex flex-col pt-6">
-          <nav className="flex-1 px-4 flex flex-col gap-1.5">
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-teal-50 text-teal-700 font-medium">
-              <Home className="w-5 h-5" />
-              <span>Dashboard</span>
-            </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors font-medium">
-              <User className="w-5 h-5" />
-              <span>Patients</span>
-            </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors font-medium">
-              <Calendar className="w-5 h-5" />
-              <span>Schedule</span>
-            </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors font-medium">
-              <Activity className="w-5 h-5" />
-              <span>Activity Logs</span>
-            </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors font-medium">
-              <Settings className="w-5 h-5" />
-              <span>Settings</span>
-            </a>
-          </nav>
-
-          <div className="p-4">
-            <button className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#D92D20] text-white font-medium hover:bg-red-700 transition-colors shadow-sm">
-              <ShieldAlert className="w-4 h-4" />
-              Emergency Alert
-            </button>
-          </div>
-
-          <div className="p-4 pt-0">
-            <div className="flex flex-col gap-3 px-4 py-4 mt-2">
-              <a href="#" className="flex items-center gap-3 text-sm text-slate-400 hover:text-slate-600 transition-colors">
-                <HelpCircle className="w-4 h-4" />
-                Help Center
-              </a>
-              <a href="#" className="flex items-center gap-3 text-sm text-slate-400 hover:text-slate-600 transition-colors">
-                <DoorClosed className="w-4 h-4" />
-                Sign Out
-              </a>
-            </div>
-          </div>
-        </aside> */}
-
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto p-8 border-l border-slate-200">
           <div className="flex flex-col xl:flex-row gap-8 max-w-7xl mx-auto items-start">
@@ -312,6 +266,16 @@ export default function DashboardPage() {
                     </div>
                   </button>
 
+                  <button onClick={() => setStatus(s => ({ ...s, mode: s.mode === 'BRIGHT' ? 'NORMAL' : 'BRIGHT' }))} className="w-full text-left rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors p-4 flex gap-4 items-center group">
+                    <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center shrink-0">
+                      <Zap className="w-5 h-5 text-blue-500" />
+                    </div>
+                    <div>
+                      <span className="block text-[15px] font-semibold text-slate-800 group-hover:text-blue-700 transition-colors">Switch Light Mode</span>
+                      <span className="block text-[13px] text-slate-500 mt-0.5 leading-snug">Toggle between room lighting modes</span>
+                    </div>
+                  </button>
+
                   <button onClick={handleDispatchMedical} className="w-full text-left rounded-2xl bg-red-50 hover:bg-red-100 transition-colors p-4 flex gap-4 items-center group">
                     <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center shrink-0">
                       <HeartPulse className="w-5 h-5 text-[#D92D20]" />
@@ -323,35 +287,13 @@ export default function DashboardPage() {
                   </button>
                 </div>
 
-                {/* <div className="pt-2 border-t border-slate-100">
-                  <h3 className="text-xs font-bold tracking-wider text-slate-400 uppercase mb-4">Patient Location</h3>
-                  <div className="bg-slate-200 rounded-2xl h-48 overflow-hidden relative shadow-inner mb-4">
-                    <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=600&auto=format&fit=crop" alt="Map Location" className="w-full h-full object-cover" />
-                    {/* Overlay pin centered 
-                    <div className="absolute inset-0 flex items-center justify-center drop-shadow-lg">
-                      <div className="w-12 h-12 bg-[#D92D20] rounded-t-full rounded-bl-full rotate-45 flex items-center justify-center border-4 border-white shadow-md">
-                        <User className="w-5 h-5 text-white -rotate-45" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-3 items-start px-1">
-                    <div className="w-5 h-5 rounded-full bg-teal-100 flex items-center justify-center mt-0.5">
-                      <span className="w-2 h-2 rounded-full bg-teal-600"></span>
-                    </div>
-                    <p className="text-sm font-medium text-slate-700 leading-tight">
-                      124 Oak Haven Lane, Suite 402<br />
-                      <span className="text-slate-500 text-xs font-normal">Palo Alto, CA 94301</span>
-                    </p>
-                  </div>
-                </div> */}
-
               </div>
             </div>
 
           </div>
         </main>
       </div>
-    </div >
+    </div>
   );
 }
 

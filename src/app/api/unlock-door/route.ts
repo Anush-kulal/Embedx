@@ -1,10 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-// Define state file path
 const stateFilePath = path.join(process.cwd(), 'simulator-state.json');
 
-// Initialize state file if it doesn't exist
 if (!fs.existsSync(stateFilePath)) {
   fs.writeFileSync(stateFilePath, JSON.stringify({ 
     lights: 'harsh_white', 
@@ -13,15 +11,15 @@ if (!fs.existsSync(stateFilePath)) {
 }
 
 export async function POST() {
-  console.log('[ACTION TRIGGERED]: Activating Ambient Sequence (Amber Lights)');
+  console.log('[ACTION TRIGGERED]: Unlocking Front Door for Emergency Access');
   
   // Update state
   const currentState = JSON.parse(fs.readFileSync(stateFilePath, 'utf-8'));
-  currentState.lights = 'amber';
+  currentState.door = 'unlocked';
   fs.writeFileSync(stateFilePath, JSON.stringify(currentState));
 
   return Response.json({
     status: "success",
-    action: "amber_lights_activated",
+    action: "door_unlocked",
   });
 }

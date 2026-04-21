@@ -73,9 +73,28 @@ export default function PatientApp() {
   const recognitionRef = useRef(null);
 
   // TWILIO / FIREBASE INTEGRATION POINT
-  const triggerSOS = useCallback(() => {
+  const triggerSOS = useCallback(async () => {
     console.log(`[EXTERNAL] Dispatching Emergency for ${userMode} Mode.`);
-    // Future: Firebase.updateDoc(patientRef, { status: 'CRITICAL' })
+    
+    // Twilio SMS Alert Integration
+    try {
+      const response = await fetch('/api/send-alert', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: `🚨 URGENT: Project Sentinel CRITICAL ALERT triggered! Immediate attention required.`,
+          recipient: '+16612716052' // Replacing with caregiver number later
+        }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        console.log('✅ Emergency SMS alert sent.');
+      } else {
+        console.error('❌ Failed to send SMS:', data.error, 'Details:', data.details);
+      }
+    } catch (error) {
+      console.error('❌ Error triggering SMS alert:', error);
+    }
   }, [userMode]);
 
   useEffect(() => {

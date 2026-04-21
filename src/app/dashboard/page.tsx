@@ -36,7 +36,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const checkStatus = () => {
-      const data = localStorage.getItem('sentinel_status');
+      const data = localStorage.getItem('nivero_status');
       if (data) {
         setStatus(JSON.parse(data));
       }
@@ -66,7 +66,7 @@ export default function DashboardPage() {
       await fetch('/api/unlock-door', { method: 'POST' });
       const newStatus = { ...status, state: 'UNLOCKED' };
       setStatus(newStatus);
-      localStorage.setItem('sentinel_status', JSON.stringify(newStatus));
+      localStorage.setItem('nivero_status', JSON.stringify(newStatus));
       console.log("Unlock door completed");
     } catch (e) {
       console.error("Failed to unlock door", e);
@@ -78,7 +78,7 @@ export default function DashboardPage() {
       await fetch('/api/trigger-lights', { method: 'POST' });
       const newStatus = { ...status, mode: 'THERAPEUTIC' };
       setStatus(newStatus);
-      localStorage.setItem('sentinel_status', JSON.stringify(newStatus));
+      localStorage.setItem('nivero_status', JSON.stringify(newStatus));
       console.log("Trigger ambience completed");
     } catch (e) {
       console.error("Failed to trigger ambience", e);
@@ -96,8 +96,8 @@ export default function DashboardPage() {
       <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-10 sticky top-0">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-1 font-bold text-xl tracking-tight">
-            <span className="text-teal-600">Aura</span>
-            <span className="text-slate-700">Care</span>
+            <span className="text-teal-600">Nivero</span>
+            <span className="text-slate-700"></span>
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
             <a href="#" className="text-teal-600">Dashboard</a>

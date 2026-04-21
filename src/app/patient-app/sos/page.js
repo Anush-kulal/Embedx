@@ -80,7 +80,7 @@ export default function PatientApp() {
 
   useEffect(() => {
     // Broadcast status to dashboard for real-time demo
-    localStorage.setItem('sentinel_status', JSON.stringify({
+    localStorage.setItem('nivero_status', JSON.stringify({
       state,
       mode: userMode,
       timestamp: Date.now()

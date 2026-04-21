@@ -73,7 +73,7 @@ export default function PatientApp() {
   const recognitionRef = useRef(null);
 
   // TWILIO / FIREBASE INTEGRATION POINT
-  const triggerSOS = useCallback(() => {
+  const triggerSOS = useCallback(async () => {
     console.log(`[EXTERNAL] Dispatching Emergency for ${userMode} Mode.`);
 
     // Twilio SMS Alert Integration
@@ -83,7 +83,7 @@ export default function PatientApp() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: `🚨 URGENT: Project Sentinel CRITICAL ALERT triggered! Immediate attention required.`,
-          recipient: '+16612716052' // Replacing with caregiver number later
+          recipient: '+918660925876' // User's provided caregiver number
         }),
       });
       const data = await response.json();

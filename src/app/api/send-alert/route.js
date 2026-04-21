@@ -1,4 +1,4 @@
-import twilio from 'twilio';
+// import twilio from 'twilio';
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
@@ -12,6 +12,8 @@ export async function POST(request) {
       );
     }
 
+    // Mocking twilio response
+    /*
     const client = twilio(
       process.env.TWILIO_ACCOUNT_SID,
       process.env.TWILIO_AUTH_TOKEN
@@ -22,8 +24,10 @@ export async function POST(request) {
       from: process.env.TWILIO_PHONE_NUMBER,
       to: recipient,
     });
+    */
 
-    return NextResponse.json({ success: true, sid: twilioResponse.sid });
+    console.log('Mocked SMS send:', { message, recipient });
+    return NextResponse.json({ success: true, sid: 'mock_sid_12345' });
   } catch (error) {
     console.error('Twilio Error:', error);
     return NextResponse.json(

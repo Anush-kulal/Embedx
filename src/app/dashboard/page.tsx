@@ -46,8 +46,15 @@ export default function DashboardPage() {
   };
 
   const handleTriggerAmbience = async () => {
-    // Implement local storage or API update for ambience
-    console.log("Trigger ambience requested");
+    try {
+      await fetch('/api/trigger-lights', { method: 'POST' });
+      const newStatus = { ...status, mode: 'THERAPEUTIC' };
+      setStatus(newStatus);
+      localStorage.setItem('sentinel_status', JSON.stringify(newStatus));
+      console.log("Trigger ambience completed");
+    } catch (e) {
+      console.error("Failed to trigger ambience", e);
+    }
   };
 
   const handleDispatchMedical = async () => {

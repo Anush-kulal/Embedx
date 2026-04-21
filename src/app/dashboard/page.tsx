@@ -5,6 +5,34 @@ import { Activity, Bell, Calendar, Home, LockOpen, MessageSquare, HelpCircle, Se
 
 export default function DashboardPage() {
   const [status, setStatus] = useState({ state: 'IDLE', mode: 'ELDER' });
+  const [heartRate, setHeartRate] = useState(72);
+  const [roomTemp, setRoomTemp] = useState(71.2);
+
+  useEffect(() => {
+    let targetHR = status.state === 'CRITICAL_ALERT' ? 142 : 72;
+    const mockInterval = setInterval(() => {
+      setHeartRate(prev => {
+        // Fluctuate by -2 to +2
+        const change = Math.floor(Math.random() * 5) - 2;
+        let newHR = prev + change;
+        // Slowly pull towards target if we are far off
+        if (newHR < targetHR - 5) newHR += 3;
+        else if (newHR > targetHR + 5) newHR -= 3;
+        return newHR;
+      });
+
+      setRoomTemp(prev => {
+        // Fluctuate by -0.2 to +0.2
+        const change = (Math.random() * 0.4) - 0.2;
+        let newTemp = prev + change;
+        // Keep within reasonable bounds
+        if (newTemp < 70) newTemp = 70;
+        if (newTemp > 73) newTemp = 73;
+        return newTemp;
+      });
+    }, 2000);
+    return () => clearInterval(mockInterval);
+  }, [status.state]);
 
   useEffect(() => {
     const checkStatus = () => {
@@ -95,7 +123,7 @@ export default function DashboardPage() {
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar Navigation */}
+        {/* Sidebar Navigation 
         <aside className="w-64 bg-white flex flex-col pt-6">
           <nav className="flex-1 px-4 flex flex-col gap-1.5">
             <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-teal-50 text-teal-700 font-medium">
@@ -139,7 +167,7 @@ export default function DashboardPage() {
               </a>
             </div>
           </div>
-        </aside>
+        </aside> */}
 
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto p-8 border-l border-slate-200">
@@ -174,7 +202,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="z-10">
                       <span className="block text-sm font-medium text-slate-500 mb-0.5">Heart Rate</span>
-                      <span className="block text-2xl font-bold text-[#B42318]">{isPanic ? '142 bpm' : '72 bpm'}</span>
+                      <span className="block text-2xl font-bold text-[#B42318]">{heartRate} bpm</span>
                     </div>
                   </div>
                   <div className="flex-1 bg-teal-50/50 rounded-3xl p-6 flex items-center gap-5 relative overflow-hidden">
@@ -183,7 +211,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="z-10">
                       <span className="block text-sm font-medium text-slate-500 mb-0.5">Room Temp</span>
-                      <span className="block text-2xl font-bold text-slate-800">71°F</span>
+                      <span className="block text-2xl font-bold text-slate-800">{roomTemp.toFixed(1)}°F</span>
                     </div>
                   </div>
                 </div>
@@ -228,10 +256,10 @@ export default function DashboardPage() {
                     Living Room Feed
                   </h3>
                   <div className="relative rounded-2xl overflow-hidden aspect-video bg-black">
-                    <iframe 
-                      src="/cctv" 
-                      allow="camera" 
-                      className="w-full h-full border-0 pointer-events-none" 
+                    <iframe
+                      src="/cctv"
+                      allow="camera"
+                      className="w-full h-full border-0 pointer-events-none"
                       title="Simulated CCTV Feed"
                     />
                   </div>
@@ -295,11 +323,11 @@ export default function DashboardPage() {
                   </button>
                 </div>
 
-                <div className="pt-2 border-t border-slate-100">
+                {/* <div className="pt-2 border-t border-slate-100">
                   <h3 className="text-xs font-bold tracking-wider text-slate-400 uppercase mb-4">Patient Location</h3>
                   <div className="bg-slate-200 rounded-2xl h-48 overflow-hidden relative shadow-inner mb-4">
                     <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=600&auto=format&fit=crop" alt="Map Location" className="w-full h-full object-cover" />
-                    {/* Overlay pin centered */}
+                    {/* Overlay pin centered 
                     <div className="absolute inset-0 flex items-center justify-center drop-shadow-lg">
                       <div className="w-12 h-12 bg-[#D92D20] rounded-t-full rounded-bl-full rotate-45 flex items-center justify-center border-4 border-white shadow-md">
                         <User className="w-5 h-5 text-white -rotate-45" />
@@ -315,7 +343,7 @@ export default function DashboardPage() {
                       <span className="text-slate-500 text-xs font-normal">Palo Alto, CA 94301</span>
                     </p>
                   </div>
-                </div>
+                </div> */}
 
               </div>
             </div>
@@ -323,7 +351,7 @@ export default function DashboardPage() {
           </div>
         </main>
       </div>
-    </div>
+    </div >
   );
 }
 

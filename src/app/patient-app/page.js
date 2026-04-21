@@ -67,10 +67,10 @@ export default function PatientDashboard() {
             <span className="text-[14px] leading-[20px] tracking-[0.02em] font-semibold text-center">Heart Rate Checker</span>
           </button>
 
-          <button className="flex flex-col items-center justify-center bg-white border border-[#d2e6ef] p-6 rounded-2xl hover:bg-slate-50 transition-colors active:scale-95 duration-150 text-[#003c90]">
+          {/* <button className="flex flex-col items-center justify-center bg-white border border-[#d2e6ef] p-6 rounded-2xl hover:bg-slate-50 transition-colors active:scale-95 duration-150 text-[#003c90]">
             <span className="material-symbols-outlined text-4xl mb-2">anchor</span>
             <span className="text-[14px] leading-[20px] tracking-[0.02em] font-semibold">Anchor</span>
-          </button>
+          </button> */}
         </div>
 
         {/* Current Vitals Summary */}

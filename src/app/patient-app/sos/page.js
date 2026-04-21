@@ -169,6 +169,14 @@ export default function PatientApp() {
       className={`h-screen w-full flex flex-col items-center justify-center p-6 transition-all duration-700 ${ui.color}`}
       onClick={() => !showDebug && reset()}
     >
+      <button 
+        onClick={(e) => { e.stopPropagation(); router.push('/patient-app'); }}
+        className="absolute top-8 left-8 z-20 flex items-center gap-2 bg-black/20 hover:bg-black/40 text-white px-5 py-2.5 rounded-full backdrop-blur-md transition-all text-sm font-bold tracking-wider hover:scale-105 active:scale-95"
+      >
+        <span className="text-lg leading-none">←</span>
+        <span>Back</span>
+      </button>
+
       <div className="absolute top-16 z-10 flex bg-white/10 p-1 rounded-full backdrop-blur-md border border-white/10" onClick={(e) => e.stopPropagation()}>
         {Object.keys(MODES).map((m) => (
           <button

@@ -220,9 +220,13 @@ export default function DashboardPage() {
                     <span className="w-3 h-2 rounded-[2px] bg-slate-400 uppercase"></span>
                     Living Room Feed
                   </h3>
-                  <div className="relative rounded-2xl overflow-hidden aspect-video bg-slate-200">
-                    <img src="https://images.unsplash.com/photo-1554995207-c18c203602cb?q=80&w=1000&auto=format&fit=crop" alt="Living Room Feed" className="w-full h-full object-cover" />
-                    <div className="absolute top-3 left-3 bg-[#D92D20] text-white text-[10px] font-bold px-2 py-0.5 rounded tracking-wide">LIVE</div>
+                  <div className="relative rounded-2xl overflow-hidden aspect-video bg-black">
+                    <iframe 
+                      src="/cctv" 
+                      allow="camera" 
+                      className="w-full h-full border-0 pointer-events-none" 
+                      title="Simulated CCTV Feed"
+                    />
                   </div>
                 </div>
                 <div className="flex-1 bg-[#F0F9FF] rounded-3xl p-6 shadow-sm flex flex-col">

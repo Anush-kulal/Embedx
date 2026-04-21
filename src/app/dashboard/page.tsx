@@ -35,6 +35,22 @@ export default function DashboardPage() {
     return 'Patient is Safe';
   };
 
+  // Restoring missing state derivations and handlers 
+  // to fix "isPanic is not defined" and undefined onClick handlers.
+  const isPanic = status.state === 'CRITICAL_ALERT';
+  const isAmber = status.mode === 'THERAPEUTIC'; 
+  const isUnlocked = status.state === 'UNLOCKED'; 
+
+  const handleUnlock = async () => {
+    // Implement local storage or API update for unlock
+    console.log("Unlock door requested");
+  };
+
+  const handleTriggerAmbience = async () => {
+    // Implement local storage or API update for ambience
+    console.log("Trigger ambience requested");
+  };
+
   return (
     <div className="min-h-screen bg-zinc-950 flex font-sans">
 

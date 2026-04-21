@@ -1,232 +1,197 @@
 'use client';
-import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Configuration for Multi-User Modes
-const MODES = {
-  ELDER: {
-    name: 'Elderly',
-    icon: '👴',
-    timeout: 10,
-    messages: {
-      IDLE: 'Monitoring health and safety...',
-      INACTIVE_WARNING: 'Are you feeling okay?',
-      AWAITING_VOICE: 'Listening for your voice...',
-      CRITICAL_ALERT: 'EMERGENCY DISPATCHED'
-    }
-  },
-  CHILD: {
-    name: 'Child',
-    icon: '👶',
-    timeout: 4,
-    messages: {
-      IDLE: 'Safety supervision active!',
-      INACTIVE_WARNING: 'Hey! Are you okay? 😊',
-      AWAITING_VOICE: 'Please say something!',
-      CRITICAL_ALERT: 'SAFETY ALERT SENT'
-    }
-  }
-};
-
-/**
- * usePatientState Hook
- */
-function usePatientState(timeout) {
-  const [state, setState] = useState('IDLE');
-  const [seconds, setSeconds] = useState(0);
-
-  const reset = useCallback(() => {
-    setState('IDLE');
-    setSeconds(0);
-  }, []);
-
-  useEffect(() => {
-    if (state === 'CRITICAL_ALERT') return;
-
-    const interval = setInterval(() => {
-      setSeconds((prev) => {
-        const next = prev + 1;
-        if (next >= timeout) {
-          if (state === 'IDLE') setState('INACTIVE_WARNING');
-          else if (state === 'INACTIVE_WARNING') setState('AWAITING_VOICE');
-          else if (state === 'AWAITING_VOICE') setState('CRITICAL_ALERT');
-          return 0;
-        }
-        return next;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [state, timeout]);
-
-  return { state, setState, reset, seconds };
-}
-
-export default function PatientApp() {
+export default function PatientDashboard() {
   const router = useRouter();
-  const [userMode, setUserMode] = useState('ELDER');
-  const currentMode = MODES[userMode];
-  
-  const { state, setState, reset, seconds } = usePatientState(currentMode.timeout);
-  const [tapCount, setTapCount] = useState(0);
-  const [showDebug, setShowDebug] = useState(false);
-  const recognitionRef = useRef(null);
-
-  // TWILIO / FIREBASE INTEGRATION POINT
-  const triggerSOS = useCallback(() => {
-    console.log(`[EXTERNAL] Dispatching Emergency for ${userMode} Mode.`);
-    // Future: Firebase.updateDoc(patientRef, { status: 'CRITICAL' })
-  }, [userMode]);
-
-  useEffect(() => {
-    // Broadcast status to dashboard for real-time demo
-    localStorage.setItem('sentinel_status', JSON.stringify({
-      state,
-      mode: userMode,
-      timestamp: Date.now()
-    }));
-
-    if (state === 'CRITICAL_ALERT') triggerSOS();
-  }, [state, userMode, triggerSOS]);
-
-  // WEB SPEECH API INTEGRATION (Voice Reset)
-  useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) return;
-
-    if (state === 'AWAITING_VOICE') {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = false;
-      recognition.lang = 'en-US';
-
-      recognition.onresult = (event) => {
-        console.log("Speech detected! Resetting system.");
-        reset();
-      };
-
-      recognition.onerror = (err) => console.error("Speech Error:", err);
-      
-      try {
-        recognition.start();
-        recognitionRef.current = recognition;
-      } catch (e) {
-        console.log("Recognition already started");
-      }
-    } else {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-        recognitionRef.current = null;
-      }
-    }
-
-    return () => {
-      if (recognitionRef.current) recognitionRef.current.stop();
-    };
-  }, [state, reset]);
-
-  const handleSecretTap = (e) => {
-    e.stopPropagation();
-    const currentCount = tapCount + 1;
-    if (currentCount >= 5) {
-      setShowDebug(true);
-      setTapCount(0);
-    } else {
-      setTapCount(currentCount);
-    }
-  };
-
-  const states = {
-    IDLE: { color: 'bg-emerald-500', label: 'SYSTEM IDLE' },
-    INACTIVE_WARNING: { color: 'bg-amber-400', label: 'WARNING' },
-    AWAITING_VOICE: { color: 'bg-sky-500', label: 'VOICE AUTH' },
-    CRITICAL_ALERT: { color: 'bg-rose-600 animate-pulse', label: 'CRITICAL' }
-  };
-
-  const ui = states[state];
 
   return (
-    <div 
-      className={`h-screen w-full flex flex-col items-center justify-center p-6 transition-all duration-700 ${ui.color}`}
-      onClick={() => !showDebug && reset()}
-    >
-      <div className="absolute top-16 z-10 flex bg-white/10 p-1 rounded-full backdrop-blur-md border border-white/10" onClick={(e) => e.stopPropagation()}>
-        {Object.keys(MODES).map((m) => (
-          <button
-            key={m}
-            onClick={() => { setUserMode(m); reset(); }}
-            className={`flex items-center gap-2 px-6 py-2 rounded-full transition-all text-xs font-bold uppercase tracking-wider ${userMode === m ? 'bg-white text-black shadow-lg scale-105' : 'text-white/60 hover:text-white'}`}
-          >
-            <span>{MODES[m].icon}</span>
-            <span>{MODES[m].name}</span>
-          </button>
-        ))}
-      </div>
+    <div className="bg-[#f7f9fb] text-[#191c1e] min-h-screen font-public-sans pb-28">
+      <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Public+Sans:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL,GRAD,opsz@400,0..1,0,24&display=swap');
 
-      <div className="text-center select-none mt-[-100px]">
-        <div className="mb-4 inline-block px-4 py-1 rounded-full bg-black/10 text-white text-[10px] font-black tracking-widest uppercase">
-          {ui.label}
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        .font-manrope { font-family: 'Manrope', sans-serif; }
+        .font-public-sans { font-family: 'Public Sans', sans-serif; }
+        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+      `}} />
+
+      {/* TopAppBar */}
+      <header className="bg-white border-b border-slate-100 fixed top-0 w-full z-50 h-16 flex justify-between items-center px-5">
+        <div className="flex items-center gap-2">
+          <span className="material-symbols-outlined text-[#003c90] pt-1">anchor</span>
+          <h1 className="text-[#003c90] font-extrabold text-xl tracking-tight font-manrope">HealthSync</h1>
         </div>
-        <h1 className="text-5xl font-black text-white mb-4 drop-shadow-sm leading-tight max-w-xs mx-auto">
-          {currentMode.messages[state]}
-        </h1>
-        <p className="text-white/60 text-sm font-mono tracking-tighter mb-8">
-          {state === 'AWAITING_VOICE' ? 'Checking for your response...' : 
-           state !== 'CRITICAL_ALERT' ? `Active Monitoring: ${currentMode.timeout - seconds}s` : 'EMERGENCY TRIGGERED'}
-        </p>
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={() => router.push('/patient-app/sos')}
+            className="bg-[#b40009] text-white px-4 py-1.5 rounded-full font-bold text-sm tracking-wider active:scale-95 transition-transform duration-150 shadow-lg shadow-[#b40009]/20">
+            SOS
+          </button>
+        </div>
+      </header>
 
-        {/* Games Button - Centered below text to avoid SOS button collision */}
-        <div onClick={(e) => e.stopPropagation()}>
+      <main className="pt-24 px-5 max-w-screen-md mx-auto">
+        {/* Quick Action Grid */}
+        <div className="grid grid-cols-2 gap-[12px] mb-[24px]">
           <button 
             onClick={() => router.push('/patient-app/games')}
-            className="inline-flex items-center justify-center gap-3 px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-[1.5rem] border border-white/20 transition-all shadow-lg active:scale-95"
-          >
-            <span className="text-3xl drop-shadow-md">🎮</span>
-            <div className="flex flex-col text-left">
-              <span className="text-[11px] font-bold uppercase tracking-widest text-white/90">Activities</span>
-              <span className="text-base font-black text-white leading-none mt-1">Play Games</span>
-            </div>
+            className="flex flex-col items-center justify-center bg-white border border-[#d2e6ef] p-6 rounded-2xl hover:bg-slate-50 transition-colors active:scale-95 duration-150 text-[#003c90]">
+            <span className="material-symbols-outlined text-4xl mb-2">sports_esports</span>
+            <span className="text-[14px] leading-[20px] tracking-[0.02em] font-semibold">Game</span>
+          </button>
+          
+          <button 
+            onClick={() => router.push('/patient-app/sos')}
+            className="flex flex-col items-center justify-center bg-[#ffdad6] border border-[#ba1a1a]/10 p-6 rounded-2xl hover:bg-[#ffdad6]/80 transition-colors active:scale-95 duration-150 relative overflow-hidden text-[#ba1a1a]">
+            <span className="material-symbols-outlined text-4xl mb-2 relative z-10" style={{ fontVariationSettings: "'FILL' 1" }}>emergency_home</span>
+            <span className="text-[14px] leading-[20px] tracking-[0.02em] font-semibold relative z-10">SOS</span>
+          </button>
+          
+          <button className="flex flex-col items-center justify-center bg-white border border-[#d2e6ef] p-6 rounded-2xl hover:bg-slate-50 transition-colors active:scale-95 duration-150 text-[#003c90]">
+            <span className="material-symbols-outlined text-4xl mb-2">monitor_heart</span>
+            <span className="text-[14px] leading-[20px] tracking-[0.02em] font-semibold text-center">Heart Rate Checker</span>
+          </button>
+          
+          <button className="flex flex-col items-center justify-center bg-white border border-[#d2e6ef] p-6 rounded-2xl hover:bg-slate-50 transition-colors active:scale-95 duration-150 text-[#003c90]">
+            <span className="material-symbols-outlined text-4xl mb-2">anchor</span>
+            <span className="text-[14px] leading-[20px] tracking-[0.02em] font-semibold">Anchor</span>
           </button>
         </div>
-      </div>
 
-      {state === 'AWAITING_VOICE' && (
-        <div className="absolute top-[60%] flex gap-2">
-          <div className="w-2 h-8 bg-white/40 rounded-full animate-bounce [animation-delay:-0.3s]" />
-          <div className="w-2 h-12 bg-white/60 rounded-full animate-bounce [animation-delay:-0.15s]" />
-          <div className="w-2 h-8 bg-white/40 rounded-full animate-bounce" />
-        </div>
-      )}
+        {/* Current Vitals Summary */}
+        <section className="mb-[24px]">
+          <h2 className="text-[20px] leading-[28px] font-semibold font-manrope text-[#191c1e] mb-[16px]">Current Vitals</h2>
+          <div className="grid grid-cols-4 grid-rows-2 gap-[12px] h-64">
+            <div className="col-span-2 row-span-2 bg-white border border-[#d2e6ef] rounded-2xl p-[16px] flex flex-col justify-between shadow-sm">
+              <div>
+                <div className="flex items-center gap-2 text-[#003c90] mb-1">
+                  <span className="material-symbols-outlined">favorite</span>
+                  <span className="text-[12px] leading-[16px] tracking-[0.04em] font-semibold">Heart Rate</span>
+                </div>
+                <p className="text-[30px] leading-[38px] tracking-[-0.02em] font-bold font-manrope text-[#191c1e]">
+                  72 <span className="text-[14px] leading-[20px] font-normal text-[#737784]">bpm</span>
+                </p>
+              </div>
+              <div className="h-16 w-full bg-[#d9e2ff] rounded-lg overflow-hidden relative">
+                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#003c90] to-transparent"></div>
+                <img className="w-full h-full object-cover mix-blend-multiply" alt="EKG line graph" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQgoTYP3osi-u2yVAblSXRFm1YAiCUH4gJCSx8Lxy95j_sUWkh3m_VPkJZ4MRO-8Q1cxpZ7AJiqeBoBtAkbqvhK88-_ug5genmVTqu9qcRfHA9RD3CQ5P4pLh5Yi8bugWf0_fuJOvTNlw8xdWurQdary3py18DhE_widyFnR1hXyhc-MS2lOv0-ANsoDv3uaHTTAFsMCIX8qSnfLI9yCj22NVmHXGrxVD3s62w-8Go5-YaToAw7gHeivP-btmmnR5l9NrBBkitJsWS"/>
+              </div>
+            </div>
 
-      <button 
-        onClick={(e) => { e.stopPropagation(); setState('CRITICAL_ALERT'); }}
-        className="absolute bottom-20 w-40 h-40 bg-white text-rose-600 rounded-full shadow-[0_0_60px_rgba(225,29,72,0.4)] flex flex-col items-center justify-center border-[12px] border-rose-600/10 active:scale-95 transition-all z-20"
-      >
-        <span className="text-4xl font-black tracking-tighter">SOS</span>
-        <span className="text-[10px] font-bold uppercase opacity-40 mt-[-4px]">Instant Help</span>
-        <div className="absolute inset-0 rounded-full animate-ping bg-rose-600/10 pointer-events-none" />
-      </button>
+            <div className="col-span-2 bg-white border border-[#d2e6ef] rounded-2xl p-[16px] flex items-center justify-between shadow-sm">
+              <div>
+                <div className="flex items-center gap-2 text-[#003c90] mb-1">
+                  <span className="material-symbols-outlined">compress</span>
+                  <span className="text-[12px] leading-[16px] tracking-[0.04em] font-semibold">Pressure</span>
+                </div>
+                <p className="text-[20px] leading-[28px] font-semibold font-manrope text-[#191c1e]">120/80</p>
+              </div>
+              <span className="material-symbols-outlined text-green-500 text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+            </div>
 
-      <div className="absolute top-0 right-0 w-20 h-20 z-30 opacity-0" onClick={handleSecretTap} />
-
-      {showDebug && (
-        <div className="absolute inset-x-0 bottom-0 z-50 bg-neutral-900 text-white p-8 rounded-t-[2.5rem] shadow-2xl border-t border-white/20" onClick={(e) => e.stopPropagation()}>
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="font-extrabold text-xl">DEBUG MODE</h2>
-            <button onClick={() => setShowDebug(false)} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10">✕</button>
+            <div className="col-span-2 bg-white border border-[#d2e6ef] rounded-2xl p-[16px] flex items-center justify-between shadow-sm">
+              <div>
+                <div className="flex items-center gap-2 text-[#003c90] mb-1">
+                  <span className="material-symbols-outlined">water_drop</span>
+                  <span className="text-[12px] leading-[16px] tracking-[0.04em] font-semibold">Oxygen</span>
+                </div>
+                <p className="text-[20px] leading-[28px] font-semibold font-manrope text-[#191c1e]">98%</p>
+              </div>
+              <span className="material-symbols-outlined text-green-500 text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            {Object.keys(states).map((s) => (
-              <button key={s} onClick={() => setState(s)} className={`py-4 rounded-2xl text-[10px] font-bold tracking-widest uppercase border border-white/5 ${state === s ? 'bg-white text-black' : 'bg-white/5'}`}>
-                {s.replace('_', ' ')}
-              </button>
-            ))}
-          </div>
-          <p className="mt-4 text-[9px] text-white/30 text-center uppercase tracking-widest font-bold">Web Speech API Supported</p>
-        </div>
-      )}
+        </section>
 
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-white/20 rounded-full" />
+        {/* Health Insights */}
+        <section className="mb-[24px]">
+          <h2 className="text-[20px] leading-[28px] font-semibold font-manrope text-[#191c1e] mb-[16px]">Health Insights</h2>
+          <div className="bg-[#0f52ba] text-[#bcceff] p-6 rounded-2xl relative overflow-hidden shadow-xl shadow-[#0f52ba]/10">
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-2 text-white">
+                <span className="material-symbols-outlined">auto_awesome</span>
+                <span className="text-[14px] leading-[20px] tracking-[0.02em] font-semibold">Daily Summary</span>
+              </div>
+              <h3 className="text-[24px] leading-[32px] tracking-[-0.01em] font-semibold font-manrope text-white mb-2">Your recovery is excellent today</h3>
+              <p className="text-[16px] leading-[24px] font-normal text-blue-100 opacity-90">Based on your sleep quality and lower resting heart rate, today is a great day for moderate exercise.</p>
+            </div>
+            <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+          </div>
+        </section>
+
+        {/* Wellness Tips */}
+        <section className="mb-[24px]">
+          <div className="flex justify-between items-end mb-[16px]">
+            <h2 className="text-[20px] leading-[28px] font-semibold font-manrope text-[#191c1e]">Wellness Tips</h2>
+            <button className="text-[#003c90] text-[14px] leading-[20px] tracking-[0.02em] font-semibold">View All</button>
+          </div>
+          
+          <div className="flex gap-[12px] overflow-x-auto pb-4 -mx-5 px-5 no-scrollbar flex-nowrap items-stretch">
+            <div className="flex-none w-64 bg-white border border-[#d2e6ef] rounded-2xl overflow-hidden shadow-sm flex flex-col">
+              <div className="h-32 bg-slate-100 flex-shrink-0">
+                <img className="w-full h-full object-cover" alt="peaceful woman meditating" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9eIXOxymOVZqxs3ZKuCl9crTE-0wWo7AFCRBFL3fzJLLQOyToKiGVPHuw2zcDOn9L3qQj6y0I5UW_XM5nHK06C5tACDUmVFjOfqjjlzQP0sCmWNQ884wXVIcmO3up0nKZyyYB6iEii0mUjBO47W_VvBbJeTdC5fexBEGl634sg87cuJZwxsg9OdIyMU6H2Dd0_miK0woWfhP8vRibj2AeQyZUEFCST148uGJyU8QeurVA7E3dM9C7IjIUx4FHN5jMWtReflaiXlHs"/>
+              </div>
+              <div className="p-[16px] flex flex-col justify-center flex-grow">
+                <span className="text-[12px] leading-[16px] tracking-[0.04em] font-semibold text-[#003c90] mb-1 block">MINDFULNESS</span>
+                <p className="text-[16px] leading-[24px] font-semibold text-[#191c1e] line-clamp-1">5-Minute Stress Reliever</p>
+              </div>
+            </div>
+            
+            <div className="flex-none w-64 bg-white border border-[#d2e6ef] rounded-2xl overflow-hidden shadow-sm flex flex-col">
+              <div className="h-32 bg-slate-100 flex-shrink-0">
+                <img className="w-full h-full object-cover" alt="healthy meal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWlzEQzKFUXQyOGpky4SgXpvZrkAUrOUHS3xAm3uy911MJ9nwT7Wdr-a7UbNxlbNymiHVEpPde6vRPwcYKf-JybDxgUXDRGpVeltBOydqqqmkY1zbLpL0RNjBfXRHANx5NLMFIJlLGZpn7EJecUUw8-9P1wXG14j0t29RBzvSlQWFgsMxfDcLB1sqanU6JPtDU9xP098MYPlBMo2KwvzUQs0qaxWSEKoKRv0wGypEm-wmqYUb3AOgU5F5ROHsagCvv5vsqCfzNSWrE"/>
+              </div>
+              <div className="p-[16px] flex flex-col justify-center flex-grow">
+                <span className="text-[12px] leading-[16px] tracking-[0.04em] font-semibold text-[#003c90] mb-1 block">NUTRITION</span>
+                <p className="text-[16px] leading-[24px] font-semibold text-[#191c1e] line-clamp-1">Best Foods for Focus</p>
+              </div>
+            </div>
+            
+            <div className="flex-none w-64 bg-white border border-[#d2e6ef] rounded-2xl overflow-hidden shadow-sm flex flex-col">
+              <div className="h-32 bg-slate-100 flex-shrink-0">
+                <img className="w-full h-full object-cover" alt="modern bedroom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlNHQBxcmqvjELiDjQkRIslwGEOtmcxaWXeslJ8A7C2iUtlLUMDg4XVy_Svaqs5AuFgVRfKRUXpAQe3krYKr0u0hP4Yogs4DZVrLDzcqb57b1yXPgJalXq25hz3xA6KhzE1Y-W0EiDJpV2pg1OltXcrec_qEQ691V9Z8Vn12tFrfI4nOFlLdl0U9AI2JJoziMrRdpBrJw9Moc8FY5uOv5mHJNqHNORIG4_HefDF7cE57phQbXQvOU1eB42eJk4Y29rIKvMH7DN32kc"/>
+              </div>
+              <div className="p-[16px] flex flex-col justify-center flex-grow">
+                <span className="text-[12px] leading-[16px] tracking-[0.04em] font-semibold text-[#003c90] mb-1 block">SLEEP</span>
+                <p className="text-[16px] leading-[24px] font-semibold text-[#191c1e] line-clamp-1">Optimizing Your Routine</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* BottomNavBar */}
+      <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 px-4 pb-safe bg-white border-t border-slate-100 shadow-[0_-4px_12px_rgba(15,82,186,0.05)] rounded-t-2xl text-[#191c1e]">
+        <button className="flex flex-col items-center justify-center text-[#003c90] bg-[#e1f5fe]/80 rounded-xl px-4 py-1 active:scale-90 transition-transform">
+          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>home</span>
+          <span className="font-manrope text-[11px] font-medium mt-1 text-[#003c90]">Home</span>
+        </button>
+        <button className="flex flex-col items-center justify-center text-[#737784] hover:text-[#0f52ba] active:scale-90 transition-transform">
+          <span className="material-symbols-outlined">monitor_heart</span>
+          <span className="font-manrope text-[11px] font-medium mt-1">Vitals</span>
+        </button>
+        <button 
+          onClick={() => router.push('/patient-app/games')}
+          className="flex flex-col items-center justify-center text-[#737784] hover:text-[#0f52ba] active:scale-90 transition-transform">
+          <span className="material-symbols-outlined">sports_esports</span>
+          <span className="font-manrope text-[11px] font-medium mt-1">Games</span>
+        </button>
+        <button className="flex flex-col items-center justify-center text-[#737784] hover:text-[#0f52ba] active:scale-90 transition-transform">
+          <span className="material-symbols-outlined">person</span>
+          <span className="font-manrope text-[11px] font-medium mt-1">Profile</span>
+        </button>
+      </nav>
     </div>
   );
 }

@@ -175,7 +175,10 @@ export default function PatientDashboard() {
           <Home fill="currentColor" strokeWidth={0} className="w-6 h-6" />
           <span className="font-manrope text-[11px] font-medium mt-1 text-[#003c90]">Home</span>
         </button>
-        <button className="flex flex-col items-center justify-center text-[#737784] hover:text-[#0f52ba] active:scale-90 transition-transform">
+        <button 
+          onClick={() => router.push('/patient-app/vitals')}
+          className="flex flex-col items-center justify-center text-[#737784] hover:text-[#0f52ba] active:scale-90 transition-transform"
+        >
           <HeartPulse className="w-6 h-6" />
           <span className="font-manrope text-[11px] font-medium mt-1">Vitals</span>
         </button>
@@ -185,7 +188,10 @@ export default function PatientDashboard() {
           <Gamepad2 className="w-6 h-6" />
           <span className="font-manrope text-[11px] font-medium mt-1">Games</span>
         </button>
-        <button className="flex flex-col items-center justify-center text-[#737784] hover:text-[#0f52ba] active:scale-90 transition-transform">
+        <button 
+          onClick={() => router.push('/patient-app/profile')}
+          className="flex flex-col items-center justify-center text-[#737784] hover:text-[#0f52ba] active:scale-90 transition-transform"
+        >
           <User className="w-6 h-6" />
           <span className="font-manrope text-[11px] font-medium mt-1">Profile</span>
         </button>

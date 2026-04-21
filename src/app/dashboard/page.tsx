@@ -34,8 +34,15 @@ export default function DashboardPage() {
   const isUnlocked = status.state === 'UNLOCKED';
 
   const handleUnlock = async () => {
-    // Implement local storage or API update for unlock
-    console.log("Unlock door requested");
+    try {
+      await fetch('/api/unlock-door', { method: 'POST' });
+      const newStatus = { ...status, state: 'UNLOCKED' };
+      setStatus(newStatus);
+      localStorage.setItem('sentinel_status', JSON.stringify(newStatus));
+      console.log("Unlock door completed");
+    } catch (e) {
+      console.error("Failed to unlock door", e);
+    }
   };
 
   const handleTriggerAmbience = async () => {

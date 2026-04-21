@@ -5,7 +5,7 @@
 ### We are selling B2B software to Medicare, not a gadget to consumers.
 Current smart homes are **reactive**—they wait for a user command. A light switch is still just a light switch, whether it's flicked by a finger or a smartphone app. 
 
-**Project Sentinel is different. We built a preventative therapeutic environment.**
+**Nivero is different. We built a preventative therapeutic environment.**
 
 ### 1. The Zero-Input Interface
 For our target demographic (elderly patients, individuals with cognitive decline), learning to navigate a complex app or remembering voice commands during a stressful moment is impossible. 
@@ -13,15 +13,15 @@ For our target demographic (elderly patients, individuals with cognitive decline
 We eliminate the interface. 
 The house itself *is* the interface. 
 
-It reads biometric and environmental cues (heart rate spikes, prolonged inactivity, door sensors) and adapts without a single explicit command from the patient.
+It reads fluctuating biometric and environmental cues (live, realistic heart rate bounds, room temperature, door sensors) and adapts without a single explicit command from the patient.
 
 ### 2. From Reactive to Preventative
 When an anomaly occurs (e.g., patient pacing at 3 AM with elevated heart rate), we do not just alert a caregiver and wait. 
 
 We intervene automatically through environment shifting:
-- **Ambient Sequence (Triggered):** We drop the harsh, anxiety-inducing lighting immediately.
+- **Ambient Sequence (Triggered):** We drop the harsh, anxiety-inducing lighting immediately. Caregivers can manually switch the lighting mode entirely remotely via the dashboard.
 - **Therapeutic Hues:** The room shifts to calming amber light sequences naturally proven to ground individuals and lower heart rate.
-- **Access Protocol:** If the anomaly escalates (e.g., fall detected or no response), we bypass standard locks, opening the front door exclusively for first responders.
+- **Access Protocol:** By default, doors remain secure and locked. However, if the anomaly escalates (e.g., fall detected or no response resulting in an SOS), we can bypass standard smart locks, instantly ensuring the path for first responders is unlocked.
 
 ### 3. The B2B2C Medicare Scalability
 This isn't a luxury feature; it's a **medical device disguised as home automation**.
@@ -33,10 +33,9 @@ This isn't a luxury feature; it's a **medical device disguised as home automatio
 
 ## 🛠️ The Demo Flow (How to present this)
 
-1. **Start the Simulator:** Open `/simulator` on a large screen or iPad. It will start with "Harsh White" lighting, simulating standard, reactive housing.
-2. **Present the Caregiver Dashboard:** Open `/dashboard` on another device. Emphasize the live biometrics.
-3. **The Incident:** Have the frontend team trigger the Next.js API route (`/api/trigger-lights`).
-4. **The Magic Moment:** Watch the simulator instantly transition to amber and update text. 
-   > *"Notice how nobody touched a button? The house sensed the distress and immediately deployed the therapeutic sequence."*
-5. **The Escalation:** Hit the "Override Smart Lock" on the dashboard (`/api/unlock-door`). Watch the simulator pop open the lock visibly. 
+1. **Start the Simulator:** Open `/simulator` or the Nivero environment on a large screen or iPad. It will start with default lighting, simulating standard housing.
+2. **Present the Caregiver Dashboard:** Open `/dashboard` on another device. Highlight the real-time, live fluctuating biome data securely monitored over the Nivero state manager.
+3. **The Magic Moment:** Trigger the environment lighting sequence (via the dashboard's "Switch Light Mode" or API) and emphasize the reactive nature of Nivero.
+   > *"Notice how smoothly the modes transition? The software actively engages the environment."*
+4. **The Escalation:** In the event of a rapid patient decline, hit the SOS or trigger a simulated event. Notice how the door (normally kept locked) allows instant override granting first responders access.
    > *"And when real danger strikes, the path for EMS is cleared instantly."*

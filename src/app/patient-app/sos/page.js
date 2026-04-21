@@ -73,7 +73,7 @@ export default function PatientApp() {
   const recognitionRef = useRef(null);
 
   // TWILIO / FIREBASE INTEGRATION POINT
-  const triggerSOS = useCallback(async () => {
+  const triggerSOS = useCallback(() => {
     console.log(`[EXTERNAL] Dispatching Emergency for ${userMode} Mode.`);
 
     // Twilio SMS Alert Integration
@@ -99,7 +99,7 @@ export default function PatientApp() {
 
   useEffect(() => {
     // Broadcast status to dashboard for real-time demo
-    localStorage.setItem('sentinel_status', JSON.stringify({
+    localStorage.setItem('nivero_status', JSON.stringify({
       state,
       mode: userMode,
       timestamp: Date.now()

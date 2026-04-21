@@ -1,8 +1,40 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Activity, Bell, Home, LockOpen, Settings, ShieldAlert, ShieldCheck, User } from "lucide-react";
 
 export default function DashboardPage() {
+  const [status, setStatus] = useState({ state: 'IDLE', mode: 'ELDER' });
+
+  useEffect(() => {
+    const checkStatus = () => {
+      const data = localStorage.getItem('sentinel_status');
+      if (data) {
+        setStatus(JSON.parse(data));
+      }
+    };
+    
+    checkStatus();
+    window.addEventListener('storage', checkStatus);
+    const interval = setInterval(checkStatus, 1000); // Polling as fallback for same-tab/window behavior
+    return () => {
+      window.removeEventListener('storage', checkStatus);
+      clearInterval(interval);
+    };
+  }, []);
+
+  const getStatusColor = () => {
+    if (status.state === 'CRITICAL_ALERT') return 'bg-red-500';
+    if (status.state === 'IDLE') return 'bg-emerald-500';
+    return 'bg-amber-500';
+  };
+
+  const getStatusText = () => {
+    if (status.state === 'CRITICAL_ALERT') return 'EMERGENCY: SOS Triggered!';
+    if (status.state === 'INACTIVE_WARNING' || status.state === 'AWAITING_VOICE') return 'Warning: Inactivity Detected';
+    return 'Patient is Safe';
+  };
+
   return (
     <div className="min-h-screen bg-zinc-950 flex font-sans">
       
@@ -73,12 +105,21 @@ export default function DashboardPage() {
                 </h2>
                 
                 <div className="flex items-start gap-8">
-                  <div className="w-24 h-24 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-                    <ShieldCheck className="w-12 h-12 text-emerald-400" />
+                  <div className={`w-24 h-24 rounded-2xl border flex items-center justify-center transition-colors duration-500 ${status.state === 'CRITICAL_ALERT' ? 'bg-red-500/10 border-red-500/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}>
+                    {status.state === 'CRITICAL_ALERT' ? (
+                      <ShieldAlert className="w-12 h-12 text-red-400" />
+                    ) : (
+                      <ShieldCheck className="w-12 h-12 text-emerald-400" />
+                    )}
                   </div>
                   <div>
-                    <h3 className="text-3xl font-semibold text-zinc-50 mb-2">John Doe is Safe</h3>
-                    <p className="text-zinc-400 mb-6">Last activity detected 2 minutes ago in the Living Room.</p>
+                    <h3 className={`text-3xl font-semibold mb-2 transition-colors ${status.state === 'CRITICAL_ALERT' ? 'text-red-500' : 'text-zinc-50'}`}>
+                      {getStatusText()}
+                    </h3>
+                    <p className="text-zinc-400 mb-6">
+                      Current Mode: <span className="text-zinc-200 capitalize font-bold">{status.mode}</span> | 
+                      Status: <span className="text-zinc-200 uppercase font-black tracking-tighter ml-1">{status.state}</span>
+                    </p>
                     
                     <div className="flex gap-4">
                       <div className="px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
